@@ -1,7 +1,7 @@
-import React from "react";
+import React from 'react'
 
 const WorkspaceIdPage = () => {
-  return <div>WorkspaceIdPage</div>;
-};
+  return <div>WorkspaceIdPage</div>
+}
 
-export default WorkspaceIdPage;
+export default WorkspaceIdPage

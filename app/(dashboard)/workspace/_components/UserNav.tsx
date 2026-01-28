@@ -1,7 +1,7 @@
-"use client";
+'use client'
 
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { Button } from '@/components/ui/button'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -10,20 +10,17 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { getAvatar } from "@/lib/get-avatar";
-import { orpc } from "@/lib/orpc";
-import {
-  LogoutLink,
-  PortalLink,
-} from "@kinde-oss/kinde-auth-nextjs/components";
-import { useSuspenseQuery } from "@tanstack/react-query";
-import { CreditCard, LogOut, User } from "lucide-react";
+} from '@/components/ui/dropdown-menu'
+import { getAvatar } from '@/lib/get-avatar'
+import { orpc } from '@/lib/orpc'
+import { LogoutLink, PortalLink } from '@kinde-oss/kinde-auth-nextjs/components'
+import { useSuspenseQuery } from '@tanstack/react-query'
+import { CreditCard, LogOut, User } from 'lucide-react'
 
 export const UserNav = () => {
   const {
     data: { user },
-  } = useSuspenseQuery(orpc.workspace.list.queryOptions());
+  } = useSuspenseQuery(orpc.workspace.list.queryOptions())
 
   return (
     <DropdownMenu>
@@ -99,5 +96,5 @@ export const UserNav = () => {
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
-  );
-};
+  )
+}

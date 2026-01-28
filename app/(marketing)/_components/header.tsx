@@ -1,49 +1,49 @@
-"use client";
-import Link from "next/link";
-import { Menu, X } from "lucide-react";
-import { Button, buttonVariants } from "@/components/ui/button";
-import React from "react";
-import { cn } from "@/lib/utils";
-import Logo from "@/public/logo.webp";
-import Image from "next/image";
+'use client'
+import Link from 'next/link'
+import { Menu, X } from 'lucide-react'
+import { Button, buttonVariants } from '@/components/ui/button'
+import React from 'react'
+import { cn } from '@/lib/utils'
+import Logo from '@/public/logo.webp'
+import Image from 'next/image'
 import {
   RegisterLink,
   LoginLink,
   LogoutLink,
-} from "@kinde-oss/kinde-auth-nextjs/components";
-import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
+} from '@kinde-oss/kinde-auth-nextjs/components'
+import { useKindeBrowserClient } from '@kinde-oss/kinde-auth-nextjs'
 
 const menuItems = [
-  { name: "Features", href: "#link" },
-  { name: "Solution", href: "#link" },
-  { name: "Pricing", href: "#link" },
-  { name: "About", href: "#link" },
-];
+  { name: 'Features', href: '#link' },
+  { name: 'Solution', href: '#link' },
+  { name: 'Pricing', href: '#link' },
+  { name: 'About', href: '#link' },
+]
 
 export const HeroHeader = () => {
-  const [menuState, setMenuState] = React.useState(false);
-  const [isScrolled, setIsScrolled] = React.useState(false);
-  const { getUser, isAuthenticated, isLoading } = useKindeBrowserClient();
-  const user = getUser();
+  const [menuState, setMenuState] = React.useState(false)
+  const [isScrolled, setIsScrolled] = React.useState(false)
+  const { getUser, isAuthenticated, isLoading } = useKindeBrowserClient()
+  const user = getUser()
 
   React.useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
-    };
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+      setIsScrolled(window.scrollY > 50)
+    }
+    window.addEventListener('scroll', handleScroll)
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
   return (
     <header>
       <nav
-        data-state={menuState && "active"}
+        data-state={menuState && 'active'}
         className="fixed z-20 w-full px-2"
       >
         <div
           className={cn(
-            "mx-auto mt-2 max-w-6xl px-6 transition-all duration-300 lg:px-12",
+            'mx-auto mt-2 max-w-6xl px-6 transition-all duration-300 lg:px-12',
             isScrolled &&
-              "bg-background/50 max-w-4xl rounded-2xl border backdrop-blur-lg lg:px-5",
+              'bg-background/50 max-w-4xl rounded-2xl border backdrop-blur-lg lg:px-5',
           )}
         >
           <div className="relative flex flex-wrap items-center justify-between gap-6 py-3 lg:gap-0 lg:py-4">
@@ -60,7 +60,7 @@ export const HeroHeader = () => {
               </Link>
               <button
                 onClick={() => setMenuState(!menuState)}
-                aria-label={menuState == true ? "Close Menu" : "Open Menu"}
+                aria-label={menuState == true ? 'Close Menu' : 'Open Menu'}
                 className="relative z-20 -m-2.5 -mr-4 block cursor-pointer p-2.5 lg:hidden"
               >
                 <Menu className="in-data-[state=active]:rotate-180 in-data-[state=active]:scale-0 in-data-[state=active]:opacity-0 m-auto size-6 duration-200" />
@@ -105,7 +105,7 @@ export const HeroHeader = () => {
                       <Link
                         href="/workspace"
                         className={buttonVariants({
-                          size: "sm",
+                          size: 'sm',
                         })}
                       >
                         Dashboard
@@ -113,8 +113,8 @@ export const HeroHeader = () => {
 
                       <LogoutLink
                         className={buttonVariants({
-                          variant: "outline",
-                          size: "sm",
+                          variant: 'outline',
+                          size: 'sm',
                         })}
                       >
                         Logout
@@ -124,9 +124,9 @@ export const HeroHeader = () => {
                     <>
                       <LoginLink
                         className={buttonVariants({
-                          variant: "outline",
-                          size: "sm",
-                          className: cn(isScrolled && "lg:hidden!"),
+                          variant: 'outline',
+                          size: 'sm',
+                          className: cn(isScrolled && 'lg:hidden!'),
                         })}
                       >
                         Login
@@ -134,8 +134,8 @@ export const HeroHeader = () => {
 
                       <RegisterLink
                         className={buttonVariants({
-                          size: "sm",
-                          className: cn(isScrolled && "lg:hidden!"),
+                          size: 'sm',
+                          className: cn(isScrolled && 'lg:hidden!'),
                         })}
                       >
                         Sign Up
@@ -143,9 +143,9 @@ export const HeroHeader = () => {
 
                       <RegisterLink
                         className={buttonVariants({
-                          size: "sm",
+                          size: 'sm',
                           className: cn(
-                            isScrolled ? "lg:inline-flex!" : "hidden!",
+                            isScrolled ? 'lg:inline-flex!' : 'hidden!',
                           ),
                         })}
                       >
@@ -160,5 +160,5 @@ export const HeroHeader = () => {
         </div>
       </nav>
     </header>
-  );
-};
+  )
+}

@@ -3,22 +3,22 @@ import { onError } from '@orpc/server'
 import { router } from '@/app/router'
 
 const handler = new RPCHandler(router, {
-    interceptors: [
-        onError((error) => {
-            console.error(error)
-        }),
-    ],
+  interceptors: [
+    onError((error) => {
+      console.error(error)
+    }),
+  ],
 })
 
 async function handleRequest(request: Request) {
-    const { response } = await handler.handle(request, {
-        prefix: '/rpc',
-        context: {
-            request: request,
-        }, // Provide initial context if needed
-    })
+  const { response } = await handler.handle(request, {
+    prefix: '/rpc',
+    context: {
+      request: request,
+    }, // Provide initial context if needed
+  })
 
-    return response ?? new Response('Not found', { status: 404 })
+  return response ?? new Response('Not found', { status: 404 })
 }
 
 export const HEAD = handleRequest

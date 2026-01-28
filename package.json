@@ -8,6 +8,7 @@
     "start": "next start",
     "lint": "eslint",
     "db": "pnpm dlx prisma db",
+    "check": "prettier --write . && eslint --fix",
     "prisma:generate": "pnpm dlx prisma generate"
   },
   "dependencies": {
@@ -57,6 +58,7 @@
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "16.1.5",
+    "prettier": "^3.8.1",
     "prisma": "^7.3.0",
     "tailwindcss": "^4",
     "tsx": "^4.21.0",

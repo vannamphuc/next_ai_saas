@@ -1,6 +1,6 @@
-"use client";
+'use client'
 
-import { Button } from "@/components/ui/button";
+import { Button } from '@/components/ui/button'
 import {
   Dialog,
   DialogContent,
@@ -8,7 +8,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog";
+} from '@/components/ui/dialog'
 import {
   Form,
   FormControl,
@@ -16,65 +16,63 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
+} from '@/components/ui/form'
+import { Input } from '@/components/ui/input'
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from "@/components/ui/tooltip";
-import { Loader, Plus } from "lucide-react";
-import { useState } from "react";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { WorkspaceSchema, workspaceSchema } from "@/app/schemas/workspace";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { orpc } from "@/lib/orpc";
-import { toast } from "sonner";
-import { isDefinedError } from "@orpc/client";
+} from '@/components/ui/tooltip'
+import { Loader, Plus } from 'lucide-react'
+import { useState } from 'react'
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { WorkspaceSchema, workspaceSchema } from '@/app/schemas/workspace'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { orpc } from '@/lib/orpc'
+import { toast } from 'sonner'
+import { isDefinedError } from '@orpc/client'
 
 export const CreateWorkspace = () => {
-  const [open, setOpen] = useState(false);
-  const queryClient = useQueryClient();
+  const [open, setOpen] = useState(false)
+  const queryClient = useQueryClient()
 
   const form = useForm({
     resolver: zodResolver(workspaceSchema),
     defaultValues: {
-      name: "",
+      name: '',
     },
-  });
+  })
 
   const createWorkspace = useMutation(
     orpc.workspace.create.mutationOptions({
       onSuccess: (data) => {
-        toast.success(
-          `Workspace "${data.workspaceName}" created successfully!`,
-        );
+        toast.success(`Workspace "${data.workspaceName}" created successfully!`)
         // refresh the workspace list
         queryClient.invalidateQueries({
           queryKey: orpc.workspace.list.queryKey(),
-        });
-        setOpen(false);
-        form.reset();
+        })
+        setOpen(false)
+        form.reset()
       },
       onError: (error) => {
         if (isDefinedError(error)) {
-          if (error.code === "RATE_LIMITED") {
-            toast.error(error.message);
-            return;
+          if (error.code === 'RATE_LIMITED') {
+            toast.error(error.message)
+            return
           }
 
-          toast.error(error.message);
-          return;
+          toast.error(error.message)
+          return
         }
-        toast.error("Failed to create workspace. Please try again.");
+        toast.error('Failed to create workspace. Please try again.')
       },
     }),
-  );
+  )
 
   const onSubmit = (data: WorkspaceSchema) => {
-    createWorkspace.mutate(data);
-  };
+    createWorkspace.mutate(data)
+  }
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -123,11 +121,11 @@ export const CreateWorkspace = () => {
               {createWorkspace.isPending && (
                 <Loader className="animate-spin size-4" />
               )}
-              {createWorkspace.isPending ? "Creating..." : "Create Workspace"}
+              {createWorkspace.isPending ? 'Creating...' : 'Create Workspace'}
             </Button>
           </form>
         </Form>
       </DialogContent>
     </Dialog>
-  );
-};
+  )
+}

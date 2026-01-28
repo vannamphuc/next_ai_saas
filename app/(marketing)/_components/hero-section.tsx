@@ -1,41 +1,41 @@
-import Link from "next/link";
-import { ArrowRight, ChevronRight } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import Image from "next/image";
-import { TextEffect } from "@/components/ui/text-effect";
-import { AnimatedGroup } from "@/components/ui/animated-group";
-import { HeroHeader } from "./header";
-import BackgroundImage from "@/public/night-background.webp";
-import HeroLight from "@/public/screenshot-light.webp";
-import HeroDark from "@/public/screenshot-dark.webp";
-import Arject from "@/public/companies/arcjet.webp";
-import Kinde from "@/public/companies/kinde.webp";
-import Motion from "@/public/companies/motion.webp";
-import Neon from "@/public/companies/neon.webp";
-import Prisma from "@/public/companies/prisma.webp";
-import Vercel from "@/public/companies/vercel.webp";
-import ORPC from "@/public/companies/orpc.webp";
-import Claude from "@/public/companies/claude.webp";
+import Link from 'next/link'
+import { ArrowRight, ChevronRight } from 'lucide-react'
+import { Button } from '@/components/ui/button'
+import Image from 'next/image'
+import { TextEffect } from '@/components/ui/text-effect'
+import { AnimatedGroup } from '@/components/ui/animated-group'
+import { HeroHeader } from './header'
+import BackgroundImage from '@/public/night-background.webp'
+import HeroLight from '@/public/screenshot-light.webp'
+import HeroDark from '@/public/screenshot-dark.webp'
+import Arject from '@/public/companies/arcjet.webp'
+import Kinde from '@/public/companies/kinde.webp'
+import Motion from '@/public/companies/motion.webp'
+import Neon from '@/public/companies/neon.webp'
+import Prisma from '@/public/companies/prisma.webp'
+import Vercel from '@/public/companies/vercel.webp'
+import ORPC from '@/public/companies/orpc.webp'
+import Claude from '@/public/companies/claude.webp'
 
 const transitionVariants = {
   item: {
     hidden: {
       opacity: 0,
-      filter: "blur(12px)",
+      filter: 'blur(12px)',
       y: 12,
     },
     visible: {
       opacity: 1,
-      filter: "blur(0px)",
+      filter: 'blur(0px)',
       y: 0,
       transition: {
-        type: "spring" as const,
+        type: 'spring' as const,
         bounce: 0.3,
         duration: 1.5,
       },
     },
   },
-};
+}
 
 export default function HeroSection() {
   return (
@@ -70,7 +70,7 @@ export default function HeroSection() {
                     opacity: 1,
                     y: 0,
                     transition: {
-                      type: "spring",
+                      type: 'spring',
                       bounce: 0.3,
                       duration: 2,
                     },
@@ -296,5 +296,5 @@ export default function HeroSection() {
         </section>
       </main>
     </>
-  );
+  )
 }

@@ -1,7 +1,7 @@
-import React from "react";
+import React from 'react'
 
 const Workspace = () => {
-  return <div>Workspace</div>;
-};
+  return <div>Workspace</div>
+}
 
-export default Workspace;
+export default Workspace

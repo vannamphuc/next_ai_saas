@@ -1,15 +1,15 @@
-"use client";
+'use client'
 
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { getAvatar } from "@/lib/get-avatar";
-import { orpc } from "@/lib/orpc";
-import { useSuspenseQuery } from "@tanstack/react-query";
-import Image from "next/image";
+import { Avatar, AvatarFallback } from '@/components/ui/avatar'
+import { getAvatar } from '@/lib/get-avatar'
+import { orpc } from '@/lib/orpc'
+import { useSuspenseQuery } from '@tanstack/react-query'
+import Image from 'next/image'
 
 export const WorkspaceMemberList = () => {
   const {
     data: { members },
-  } = useSuspenseQuery(orpc.channel.list.queryOptions());
+  } = useSuspenseQuery(orpc.channel.list.queryOptions())
 
   return (
     <div className="space-y-0.5 py-1">
@@ -42,5 +42,5 @@ export const WorkspaceMemberList = () => {
         </div>
       ))}
     </div>
-  );
-};
+  )
+}
