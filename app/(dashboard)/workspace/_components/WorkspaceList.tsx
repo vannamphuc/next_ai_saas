@@ -1,3 +1,5 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
 import {
   Tooltip,
@@ -5,25 +7,10 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { orpc } from "@/lib/orpc";
 import { cn } from "@/lib/utils";
-
-const workspaces = [
-  {
-    id: "1",
-    name: "TeamFlow 1",
-    avatar: "TF",
-  },
-  {
-    id: "2",
-    name: "TeamFlow 2",
-    avatar: "TF2",
-  },
-  {
-    id: "3",
-    name: "TeamFlow 3",
-    avatar: "TF3",
-  },
-];
+import { LoginLink } from "@kinde-oss/kinde-auth-nextjs/components";
+import { useSuspenseQuery } from "@tanstack/react-query";
 
 const colorCombinations = [
   // Blue
@@ -72,27 +59,36 @@ const getWorkspaceColor = (workspaceId: string) => {
 };
 
 export const WorkspaceList = () => {
+  const {
+    data: { workspaces, currentWorkspace },
+  } = useSuspenseQuery(orpc.workspace.list.queryOptions());
+
   return (
     <TooltipProvider>
       <div className="flex flex-col gap-2">
         {workspaces.map((workspace) => {
+          const isActive = workspace.id === currentWorkspace.orgCode;
           return (
             <Tooltip key={workspace.id}>
               <TooltipTrigger asChild>
-                <Button
-                  size="icon"
-                  //   className="size-12 transition-all duration-200"
-                  className={cn(
-                    "size-12 transition-all duration-200",
-                    getWorkspaceColor(workspace.id),
-                  )}
-                >
-                  <span className="text-sm font-semibold">
-                    {workspace.avatar}
-                  </span>
-                </Button>
+                <LoginLink orgCode={workspace.id}>
+                  <Button
+                    size="icon"
+                    className={cn(
+                      "size-12 transition-all duration-200",
+                      getWorkspaceColor(workspace.id),
+                    )}
+                  >
+                    <span className="text-sm font-semibold">
+                      {workspace.avatar}
+                    </span>
+                  </Button>
+                </LoginLink>
               </TooltipTrigger>
-              <TooltipContent side="right">{workspace.name}</TooltipContent>
+              <TooltipContent side="right">
+                {workspace.name}
+                {isActive && " (Current)"}
+              </TooltipContent>
             </Tooltip>
           );
         })}
