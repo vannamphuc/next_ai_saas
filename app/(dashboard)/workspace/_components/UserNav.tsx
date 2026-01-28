@@ -37,6 +37,7 @@ export const UserNav = () => {
             <AvatarImage
               src={getAvatar(user.picture, user.email!)}
               alt="User Avatar"
+              className="object-cover"
             />
             <AvatarFallback>
               {user.given_name?.slice(0, 2).toUpperCase()}

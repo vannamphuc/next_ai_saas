@@ -120,7 +120,6 @@ export const CreateWorkspace = () => {
             />
 
             <Button disabled={createWorkspace.isPending} type="submit">
-              {/* Create Workspace */}
               {createWorkspace.isPending && (
                 <Loader className="animate-spin size-4" />
               )}
