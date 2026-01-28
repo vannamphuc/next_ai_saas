@@ -23,20 +23,49 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { Plus } from "lucide-react";
+import { Loader, Plus } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { workspaceSchema } from "@/app/schemas/workspace";
+import { WorkspaceSchema, workspaceSchema } from "@/app/schemas/workspace";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { orpc } from "@/lib/orpc";
+import { toast } from "sonner";
+import z from "zod";
 
 export const CreateWorkspace = () => {
   const [open, setOpen] = useState(false);
+  const queryClient = useQueryClient();
+
   const form = useForm({
     resolver: zodResolver(workspaceSchema),
     defaultValues: {
       name: "",
     },
   });
+
+  const createWorkspace = useMutation(
+    orpc.workspace.create.mutationOptions({
+      onSuccess: (data) => {
+        toast.success(
+          `Workspace "${data.workspaceName}" created successfully!`,
+        );
+        // refresh the workspace list
+        queryClient.invalidateQueries({
+          queryKey: orpc.workspace.list.queryKey(),
+        });
+        setOpen(false);
+        form.reset();
+      },
+      onError: () => {
+        toast.error("Failed to create workspace. Please try again.");
+      },
+    }),
+  );
+
+  const onSubmit = (data: WorkspaceSchema) => {
+    createWorkspace.mutate(data);
+  };
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -66,12 +95,7 @@ export const CreateWorkspace = () => {
         </DialogHeader>
 
         <Form {...form}>
-          <form
-            className="space-y-6"
-            onSubmit={form.handleSubmit((data) => {
-              console.log(data);
-            })}
-          >
+          <form className="space-y-6" onSubmit={form.handleSubmit(onSubmit)}>
             <FormField
               control={form.control}
               name="name"
@@ -86,7 +110,11 @@ export const CreateWorkspace = () => {
               )}
             />
 
-            <Button type="submit">Create Workspace</Button>
+            <Button disabled={createWorkspace.isPending} type="submit">
+              {/* Create Workspace */}
+              {createWorkspace.isPending && <Loader className="animate-spin size-4" />}
+              {createWorkspace.isPending ? "Creating..." : "Create Workspace"}
+            </Button>
           </form>
         </Form>
       </DialogContent>

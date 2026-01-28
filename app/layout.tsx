@@ -1,8 +1,11 @@
+import "@/lib/orpc.server";
 import type { Metadata } from "next";
 import { AuthProvider } from "@/lib/AuthProvider";
 import { ThemeProvider } from "@/lib/theme-provider";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import { Providers } from "@/lib/providers";
+import { Toaster } from "@/components/ui/sonner";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -36,7 +39,8 @@ export default function RootLayout({
             enableSystem
             disableTransitionOnChange
           >
-            {children}
+            <Providers>{children}</Providers>
+            <Toaster richColors closeButton position="top-center"/>
           </ThemeProvider>
         </body>
       </html>
