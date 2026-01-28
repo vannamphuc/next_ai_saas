@@ -33,8 +33,6 @@ yarn-error.log*
 # env files (can opt-in for committing if needed)
 .env*
 
-# /lib/generated/prisma
-
 # vercel
 .vercel
 
@@ -42,4 +40,4 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-/lib/generated/prisma
+# /lib/generated/prisma
