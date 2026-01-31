@@ -11,11 +11,26 @@ model Channel {
   id        String   @id @default(uuid())
   name      String
   createdAt DateTime @default(now())
-  updatedAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   // foreign key (kinde ids)
   workspaceId String // Kinde organization ID
   createdById String // Kinde user ID
+  mesages     Mesage[]
 
   @@unique([workspaceId, name])
+}
+
+model Mesage {
+  id           String   @id @default(uuid())
+  content      String
+  imageUrl     String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  authorId     String
+  authorEmail  String
+  authorName   String
+  authorAvatar String
+  Channel      Channel? @relation(fields: [channelId], references: [id])
+  channelId    String?
 }

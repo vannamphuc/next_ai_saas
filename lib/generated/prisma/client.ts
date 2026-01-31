@@ -44,3 +44,8 @@ export { Prisma }
  * 
  */
 export type Channel = Prisma.ChannelModel
+/**
+ * Model Mesage
+ * 
+ */
+export type Mesage = Prisma.MesageModel

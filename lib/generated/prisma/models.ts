@@ -9,4 +9,5 @@
  * 🟢 You can import this file directly.
  */
 export type * from './models/Channel'
+export type * from './models/Mesage'
 export type * from './commonInputTypes'

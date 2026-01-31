@@ -9,7 +9,8 @@
     "lint": "eslint",
     "db": "pnpm dlx prisma db",
     "check": "prettier --write . && eslint --fix",
-    "prisma:generate": "pnpm dlx prisma generate"
+    "prisma:generate": "pnpm dlx prisma generate",
+    "prisma:studio": "pnpm dlx prisma studio"
   },
   "dependencies": {
     "@arcjet/inspect": "^1.0.0",
@@ -34,9 +35,19 @@
     "@radix-ui/react-tooltip": "^1.2.8",
     "@tanstack/react-query": "^5.90.20",
     "@tanstack/react-query-devtools": "^5.91.2",
+    "@tiptap/extension-code-block": "^3.18.0",
+    "@tiptap/extension-code-block-lowlight": "^3.18.0",
+    "@tiptap/extension-text-align": "^3.18.0",
+    "@tiptap/extensions": "^3.18.0",
+    "@tiptap/pm": "^3.18.0",
+    "@tiptap/react": "^3.18.0",
+    "@tiptap/starter-kit": "^3.18.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "dompurify": "^3.3.1",
     "dotenv": "^17.2.3",
+    "html-react-parser": "^5.2.15",
+    "lowlight": "^3.3.0",
     "lucide-react": "^0.563.0",
     "motion": "^12.29.2",
     "next": "16.1.5",
@@ -51,6 +62,7 @@
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
+    "@tailwindcss/typography": "^0.5.19",
     "@tanstack/eslint-plugin-query": "^5.91.3",
     "@types/node": "^20",
     "@types/pg": "^8.16.0",
