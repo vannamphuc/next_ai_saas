@@ -28,8 +28,8 @@ export const ChannelList = () => {
             className={buttonVariants({
               variant: 'ghost',
               className: cn(
-                isActive && 'text-accent-foreground bg-accent',
                 'w-full justify-start px-2 py-1 h-7 text-muted-foreground hover:text-accent-foreground hover:bg-accent',
+                isActive && 'text-accent-foreground bg-accent',
               ),
             })}
           >
