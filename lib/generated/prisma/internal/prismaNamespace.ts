@@ -384,7 +384,8 @@ type FieldRefInputType<Model, FieldType> = Model extends never ? never : FieldRe
 
 
 export const ModelName = {
-  Channel: 'Channel'
+  Channel: 'Channel',
+  Mesage: 'Mesage'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -400,7 +401,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "channel"
+    modelProps: "channel" | "mesage"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -478,6 +479,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    Mesage: {
+      payload: Prisma.$MesagePayload<ExtArgs>
+      fields: Prisma.MesageFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.MesageFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MesagePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.MesageFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MesagePayload>
+        }
+        findFirst: {
+          args: Prisma.MesageFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MesagePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.MesageFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MesagePayload>
+        }
+        findMany: {
+          args: Prisma.MesageFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MesagePayload>[]
+        }
+        create: {
+          args: Prisma.MesageCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MesagePayload>
+        }
+        createMany: {
+          args: Prisma.MesageCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.MesageCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MesagePayload>[]
+        }
+        delete: {
+          args: Prisma.MesageDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MesagePayload>
+        }
+        update: {
+          args: Prisma.MesageUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MesagePayload>
+        }
+        deleteMany: {
+          args: Prisma.MesageDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.MesageUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.MesageUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MesagePayload>[]
+        }
+        upsert: {
+          args: Prisma.MesageUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MesagePayload>
+        }
+        aggregate: {
+          args: Prisma.MesageAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateMesage>
+        }
+        groupBy: {
+          args: Prisma.MesageGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.MesageGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.MesageCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.MesageCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -529,6 +604,22 @@ export const ChannelScalarFieldEnum = {
 export type ChannelScalarFieldEnum = (typeof ChannelScalarFieldEnum)[keyof typeof ChannelScalarFieldEnum]
 
 
+export const MesageScalarFieldEnum = {
+  id: 'id',
+  content: 'content',
+  imageUrl: 'imageUrl',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  authorId: 'authorId',
+  authorEmail: 'authorEmail',
+  authorName: 'authorName',
+  authorAvatar: 'authorAvatar',
+  channelId: 'channelId'
+} as const
+
+export type MesageScalarFieldEnum = (typeof MesageScalarFieldEnum)[keyof typeof MesageScalarFieldEnum]
+
+
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -543,6 +634,14 @@ export const QueryMode = {
 } as const
 
 export type QueryMode = (typeof QueryMode)[keyof typeof QueryMode]
+
+
+export const NullsOrder = {
+  first: 'first',
+  last: 'last'
+} as const
+
+export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
 
 
 
@@ -688,6 +787,7 @@ export type PrismaClientOptions = ({
 }
 export type GlobalOmitConfig = {
   channel?: Prisma.ChannelOmit
+  mesage?: Prisma.MesageOmit
 }
 
 /* Types for Logging */
