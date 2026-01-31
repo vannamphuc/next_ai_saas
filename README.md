@@ -70,57 +70,57 @@ TailFlow is a modern team communication platform built with Next.js 16, featurin
 
 ### Core Framework
 
-| Technology | Version | Description |
-|------------|---------|-------------|
-| Next.js | 16.1.5 | React framework with App Router |
-| React | 19.2.3 | UI library |
-| TypeScript | 5 | Type safety |
+| Technology | Version | Description                     |
+| ---------- | ------- | ------------------------------- |
+| Next.js    | 16.1.5  | React framework with App Router |
+| React      | 19.2.3  | UI library                      |
+| TypeScript | 5       | Type safety                     |
 
 ### Authentication
 
-| Technology | Description |
-|------------|-------------|
-| Kinde Auth | OAuth 2.0 / OIDC authentication |
+| Technology           | Description                      |
+| -------------------- | -------------------------------- |
+| Kinde Auth           | OAuth 2.0 / OIDC authentication  |
 | Kinde Management API | Organization and user management |
 
 ### API & Data Fetching
 
-| Technology | Description |
-|------------|-------------|
-| ORPC | Type-safe RPC framework |
+| Technology     | Description             |
+| -------------- | ----------------------- |
+| ORPC           | Type-safe RPC framework |
 | TanStack Query | Server state management |
-| Zod | Schema validation |
+| Zod            | Schema validation       |
 
 ### Database
 
-| Technology | Description |
-|------------|-------------|
-| PostgreSQL | Primary database |
-| Prisma | ORM with type generation |
-| Neon | Serverless PostgreSQL adapter |
+| Technology | Description                   |
+| ---------- | ----------------------------- |
+| PostgreSQL | Primary database              |
+| Prisma     | ORM with type generation      |
+| Neon       | Serverless PostgreSQL adapter |
 
 ### Security
 
-| Technology | Description |
-|------------|-------------|
-| Arcjet | Bot detection, shield, rate limiting |
+| Technology | Description                          |
+| ---------- | ------------------------------------ |
+| Arcjet     | Bot detection, shield, rate limiting |
 
 ### Styling & UI
 
-| Technology | Description |
-|------------|-------------|
-| Tailwind CSS 4 | Utility-first CSS |
-| shadcn/ui | Pre-built accessible components |
-| Radix UI | Headless UI primitives |
-| Motion | Animation library |
-| Lucide React | Icon library |
+| Technology     | Description                     |
+| -------------- | ------------------------------- |
+| Tailwind CSS 4 | Utility-first CSS               |
+| shadcn/ui      | Pre-built accessible components |
+| Radix UI       | Headless UI primitives          |
+| Motion         | Animation library               |
+| Lucide React   | Icon library                    |
 
 ### Form & Validation
 
-| Technology | Description |
-|------------|-------------|
+| Technology      | Description           |
+| --------------- | --------------------- |
 | React Hook Form | Form state management |
-| Zod | Schema validation |
+| Zod             | Schema validation     |
 
 ---
 
@@ -249,15 +249,15 @@ DATABASE_URL=postgresql://user:password@host/dbname?sslmode=require
 
 ## Scripts
 
-| Command | Description |
-|---------|-------------|
-| `pnpm dev` | Start development server |
-| `pnpm build` | Create production build |
-| `pnpm start` | Start production server |
-| `pnpm lint` | Run ESLint |
-| `pnpm check` | Run Prettier + ESLint fix |
-| `pnpm db` | Run Prisma DB commands |
-| `pnpm prisma:generate` | Generate Prisma client |
+| Command                | Description               |
+| ---------------------- | ------------------------- |
+| `pnpm dev`             | Start development server  |
+| `pnpm build`           | Create production build   |
+| `pnpm start`           | Start production server   |
+| `pnpm lint`            | Run ESLint                |
+| `pnpm check`           | Run Prettier + ESLint fix |
+| `pnpm db`              | Run Prisma DB commands    |
+| `pnpm prisma:generate` | Generate Prisma client    |
 
 ---
 
@@ -279,6 +279,7 @@ const { data } = orpc.workspace.list.useQuery()
 ```
 
 **Response:**
+
 ```json
 {
   "workspaces": [
@@ -296,7 +297,7 @@ const { data } = orpc.workspace.list.useQuery()
 ```typescript
 // Client usage
 const mutation = orpc.workspace.create.useMutation()
-mutation.mutate({ name: "New Workspace" })
+mutation.mutate({ name: 'New Workspace' })
 ```
 
 ### Channel Endpoints
@@ -313,7 +314,7 @@ const { data } = orpc.channels.list.useQuery()
 ```typescript
 // Client usage
 const mutation = orpc.channels.create.useMutation()
-mutation.mutate({ name: "general" })
+mutation.mutate({ name: 'general' })
 ```
 
 ---

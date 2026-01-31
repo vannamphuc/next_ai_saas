@@ -14,5 +14,5 @@ export const router = {
   message: {
     create: createMessage,
     list: listMessages,
-  }
+  },
 }
