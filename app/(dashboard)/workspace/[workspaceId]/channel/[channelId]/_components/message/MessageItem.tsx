@@ -41,13 +41,13 @@ export const MessageItem = ({ message }: IAppProps) => {
         />
 
         {message.imageUrl && (
-          <div className='mt-4'>
+          <div className="mt-4">
             <Image
               src={message.imageUrl}
               alt="Message Attachment"
               width={512}
               height={512}
-              className='rounded-md max-h-[320px] w-auto object-contain'
+              className="rounded-md max-h-[320px] w-auto object-contain"
             />
           </div>
         )}

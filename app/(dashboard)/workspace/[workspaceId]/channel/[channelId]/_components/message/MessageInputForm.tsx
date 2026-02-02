@@ -11,17 +11,28 @@ import {
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { MessageComposer } from './MessageComposer'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
+import {
+  InfiniteData,
+  useMutation,
+  useQueryClient,
+} from '@tanstack/react-query'
 import { orpc } from '@/lib/orpc'
 import { toast } from 'sonner'
 import { useState } from 'react'
 import { useAttachmentUpload } from '@/hooks/use-attachment-upload'
+import { Mesage } from '@/lib/generated/prisma/client'
+import { KindeUser } from '@kinde-oss/kinde-auth-nextjs'
+import { getAvatar } from '@/lib/get-avatar'
 
 interface IAppProps {
   channelId: string
+  user: KindeUser<Record<string, unknown>>
 }
 
-export const MessageInputForm = ({ channelId }: IAppProps) => {
+type MessagePage = { items: Mesage[]; nextCursor?: string }
+type InfiniteMessages = InfiniteData<MessagePage>
+
+export const MessageInputForm = ({ channelId, user }: IAppProps) => {
   const queryClient = useQueryClient()
   const [editorKey, setEditorKey] = useState(0)
   const upload = useAttachmentUpload()
@@ -36,20 +47,109 @@ export const MessageInputForm = ({ channelId }: IAppProps) => {
 
   const createMessageMutation = useMutation(
     orpc.message.create.mutationOptions({
-      onSuccess: () => {
-        queryClient.invalidateQueries({
-          queryKey: orpc.message.list.key(),
+      onMutate: async (data) => {
+        await queryClient.cancelQueries({
+          queryKey: ['messages.list', channelId],
         })
+
+        const previousData = queryClient.getQueryData<InfiniteMessages>([
+          'messages.list',
+          channelId,
+        ])
+
+        const tempId = `optimistic-${crypto.randomUUID()}`
+
+        const optimisticMessage: Mesage = {
+          id: tempId,
+          content: data.content,
+          imageUrl: data.imageUrl ?? null,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+          channelId: channelId,
+          authorId: user.id,
+          authorEmail: user.email!,
+          authorName: user.given_name ?? 'John Doe',
+          authorAvatar: getAvatar(user.picture, user.email!),
+        }
+
+        queryClient.setQueryData<InfiniteMessages>(
+          ['messages.list', channelId],
+          (oldData) => {
+            if (!oldData) {
+              return {
+                pages: [
+                  {
+                    items: [optimisticMessage],
+                    nextCursor: undefined,
+                  },
+                ],
+                pageParams: [undefined],
+              }
+            }
+
+            const firstPage = oldData.pages[0] ?? {
+              items: [],
+              nextCursor: undefined,
+            }
+
+            const updatedFirstPage = {
+              ...firstPage,
+              items: [optimisticMessage, ...firstPage.items],
+            }
+
+            return {
+              ...oldData,
+              pages: [updatedFirstPage, ...oldData.pages.slice(1)],
+            }
+          },
+        )
+
+        return {
+          optimisticMessage,
+          previousData,
+        }
+      },
+
+      onSuccess: (data, _variables, context) => {
+        queryClient.setQueryData<InfiniteMessages>(
+          ['messages.list', channelId],
+          (old) => {
+            if (!old) return old
+
+            const updatedPages = old.pages.map((page) => {
+              return {
+                ...page,
+                items: page.items.map((item) => {
+                  if (item.id === context?.optimisticMessage.id) {
+                    return data
+                  }
+                  return item
+                }),
+              }
+            })
+
+            return {
+              ...old,
+              pages: updatedPages,
+            }
+          },
+        )
         form.reset({
           channelId,
           content: '',
         })
         upload.clear()
-        setEditorKey((k) => k + 1)
+        setEditorKey((prev) => prev + 1)
         return toast.success('Message created successfully')
       },
 
-      onError: () => {
+      onError: (error, _variables, context) => {
+        if (context?.previousData) {
+          queryClient.setQueryData<InfiniteMessages>(
+            ['messages.list', channelId],
+            context.previousData,
+          )
+        }
         return toast.error('Something went wrong')
       },
     }),

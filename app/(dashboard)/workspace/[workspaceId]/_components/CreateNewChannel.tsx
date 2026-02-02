@@ -28,7 +28,7 @@ import { isDefinedError } from '@orpc/client'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { Loader, Plus } from 'lucide-react'
 import { useParams, useRouter } from 'next/navigation'
-import { useState } from 'react'
+import { Activity, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 
@@ -103,14 +103,14 @@ export const CreateNewChannel = () => {
                     <Input placeholder="My Channel" {...field} />
                   </FormControl>
 
-                  {transformedName && (
+                  <Activity mode={transformedName ? 'visible' : 'hidden'}>
                     <p className="text-sm text-muted-foreground">
                       Will be created as:{' '}
                       <code className="bg-muted px-1 py-0 rounded">
                         {transformedName}
                       </code>
                     </p>
-                  )}
+                  </Activity>
 
                   <FormMessage />
                 </FormItem>
