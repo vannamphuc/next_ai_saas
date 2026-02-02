@@ -29,8 +29,8 @@ interface IAppProps {
   user: KindeUser<Record<string, unknown>>
 }
 
-type MessagePage = { items: Mesage[]; nextCursor?: string }
-type InfiniteMessages = InfiniteData<MessagePage>
+export type MessagePage = { items: Mesage[]; nextCursor?: string }
+export type InfiniteMessages = InfiniteData<MessagePage>
 
 export const MessageInputForm = ({ channelId, user }: IAppProps) => {
   const queryClient = useQueryClient()

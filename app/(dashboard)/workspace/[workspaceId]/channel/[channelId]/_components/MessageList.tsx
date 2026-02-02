@@ -1,7 +1,11 @@
 /* eslint-disable react-hooks/set-state-in-effect */
 'use client'
 
-import { useInfiniteQuery, useQuery } from '@tanstack/react-query'
+import {
+  useInfiniteQuery,
+  useQuery,
+  useSuspenseQuery,
+} from '@tanstack/react-query'
 import { MessageItem } from './message/MessageItem'
 import { orpc } from '@/lib/orpc'
 import { useParams } from 'next/navigation'
@@ -35,6 +39,10 @@ export const MessageList = () => {
       pageParams: [...data.pageParams].reverse(),
     }),
   })
+
+  const {
+    data: { user },
+  } = useSuspenseQuery(orpc.workspace.list.queryOptions())
 
   const {
     data,
@@ -186,7 +194,13 @@ export const MessageList = () => {
           </div>
         ) : (
           items?.map((message) => {
-            return <MessageItem key={message.id} message={message} />
+            return (
+              <MessageItem
+                key={message.id}
+                message={message}
+                currentUserId={user.id}
+              />
+            )
           })
         )}
         <div ref={bottomRef} />
