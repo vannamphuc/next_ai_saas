@@ -24,7 +24,7 @@ export const RichTextEditor = ({
       if (!field?.value) return ''
 
       try {
-        JSON.parse(field.value)
+        return JSON.parse(field.value)
       } catch {
         return ''
       }
