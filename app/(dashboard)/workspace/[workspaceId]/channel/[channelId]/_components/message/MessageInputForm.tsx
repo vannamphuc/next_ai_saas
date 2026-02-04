@@ -23,14 +23,12 @@ import { useAttachmentUpload } from '@/hooks/use-attachment-upload'
 import { Mesage } from '@/lib/generated/prisma/client'
 import { KindeUser } from '@kinde-oss/kinde-auth-nextjs'
 import { getAvatar } from '@/lib/get-avatar'
+import { InfiniteMessages } from '@/lib/type'
 
 interface IAppProps {
   channelId: string
   user: KindeUser<Record<string, unknown>>
 }
-
-export type MessagePage = { items: Mesage[]; nextCursor?: string }
-export type InfiniteMessages = InfiniteData<MessagePage>
 
 export const MessageInputForm = ({ channelId, user }: IAppProps) => {
   const queryClient = useQueryClient()
@@ -69,6 +67,7 @@ export const MessageInputForm = ({ channelId, user }: IAppProps) => {
           authorId: user.id,
           authorEmail: user.email!,
           authorName: user.given_name ?? 'John Doe',
+          threadId: null,
           authorAvatar: getAvatar(user.picture, user.email!),
         }
 

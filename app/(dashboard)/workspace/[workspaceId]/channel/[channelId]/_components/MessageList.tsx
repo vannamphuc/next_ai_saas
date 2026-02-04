@@ -1,11 +1,7 @@
 /* eslint-disable react-hooks/set-state-in-effect */
 'use client'
 
-import {
-  useInfiniteQuery,
-  useQuery,
-  useSuspenseQuery,
-} from '@tanstack/react-query'
+import { useInfiniteQuery, useSuspenseQuery } from '@tanstack/react-query'
 import { MessageItem } from './message/MessageItem'
 import { orpc } from '@/lib/orpc'
 import { useParams } from 'next/navigation'
