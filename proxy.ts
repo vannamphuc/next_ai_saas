@@ -20,19 +20,18 @@ const aj = arcjet({
 
 const existingMiddleware = async (req: NextRequest) => {
   const anyReq = req as {
-    nextUrl: NextRequest["nextUrl"];
+    nextUrl: NextRequest['nextUrl']
     kindeAuth?: {
-      token?: any,
+      token?: any
       user?: any
     }
-
   }
   const url = req.nextUrl
 
   const orgCode =
     anyReq.kindeAuth?.user?.org_code ||
     anyReq.kindeAuth?.token?.org_code ||
-    anyReq.kindeAuth?.token?.claims?.org_code;
+    anyReq.kindeAuth?.token?.claims?.org_code
 
   if (
     url.pathname.startsWith('/workspace') &&
@@ -49,8 +48,8 @@ const existingMiddleware = async (req: NextRequest) => {
 export default createMiddleware(
   aj,
   withAuth(existingMiddleware, {
-    publicPaths: ["/", "/api/uploadthing"]
-  }) as NextProxy
+    publicPaths: ['/', '/api/uploadthing'],
+  }) as NextProxy,
 )
 
 export const config = {
