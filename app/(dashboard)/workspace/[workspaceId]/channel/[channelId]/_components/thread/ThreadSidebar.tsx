@@ -11,6 +11,7 @@ import { KindeUser } from '@kinde-oss/kinde-auth-nextjs'
 import { Skeleton } from '@/components/ui/skeleton'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { ThreadSkeleton } from './ThreadSkeleton'
+import { SummaryThread } from './SummaryThread'
 
 interface ThreadSidebarProps {
   user: KindeUser<Record<string, unknown>>
@@ -122,7 +123,7 @@ export const ThreadSidebar = ({ user }: ThreadSidebarProps) => {
   }
 
   return (
-    <div className="w-[30rem] border-l flex flex-col h-full">
+    <div className="w-[32rem] border-l flex flex-col h-full">
       <div className="border-b h-14 px-4 flex items-center justify-between">
         <div className="flex items-center gap-2">
           <MessageSquare className="size-4" />
@@ -130,6 +131,7 @@ export const ThreadSidebar = ({ user }: ThreadSidebarProps) => {
         </div>
 
         <div className="flex items-center gap-2">
+          <SummaryThread messageId={threadId!} />
           <Button variant="outline" size="icon" onClick={closeThread}>
             <X className="size-4" />
           </Button>

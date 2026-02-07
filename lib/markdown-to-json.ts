@@ -1,0 +1,17 @@
+import MarkdownIt from 'markdown-it'
+import DOMPurify from 'dompurify'
+import { editorExtensions } from '@/components/rich-text-edior/extensions'
+import { generateJSON } from '@tiptap/react'
+
+const md = new MarkdownIt({
+  html: false,
+  linkify: true,
+  breaks: false,
+})
+
+export const markdownToJson = (markdown: string) => {
+  const html = md.render(markdown)
+  const cleanHtml = DOMPurify.sanitize(html, { USE_PROFILES: { html: true } })
+  const json = generateJSON(cleanHtml, editorExtensions)
+  return json
+}
