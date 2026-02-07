@@ -28,7 +28,7 @@ const ChannelPageMain = () => {
   }
 
   return (
-    <div className="flex h-screen w-full">
+    <div className="flex h-screen w-full flex-1">
       <div className="flex flex-col flex-1 min-w-0">
         {/* Fixed Header */}
         {isLoading ? (

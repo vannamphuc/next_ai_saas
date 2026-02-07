@@ -22,7 +22,7 @@ const ChannelListLayout = async ({
 
   return (
     <>
-      <div className="flex h-full w-80 flex-col bg-secondary/50 border-r border-border">
+      <div className="flex h-full w-70 flex-col bg-secondary/50 border-r border-border">
         {/* Header */}
         <div className="flex items-center px-4 h-14 border-b border-border">
           <HydrateClient client={queryClient}>
@@ -51,20 +51,18 @@ const ChannelListLayout = async ({
         </div>
 
         {/* Members List */}
-        <div className="px-4 py-2 border border-border">
-          <Collapsible defaultOpen>
-            <CollapsibleTrigger className="flex w-full items-center justify-between px-2 py-1 text-sm font-medium text-muted-foreground hover:bg-accent hover:text-foreground [&[data-state=open]>svg]:rotate-180">
-              Members
-              <ChevronDown className="size-4 transition-transform duration-200" />
-            </CollapsibleTrigger>
+        <Collapsible>
+          <CollapsibleTrigger className="flex w-full items-center justify-between text-sm font-medium text-muted-foreground hover:bg-accent hover:text-foreground [&[data-state=open]>svg]:rotate-180 px-4 py-2 border border-border">
+            Members
+            <ChevronDown className="size-4 transition-transform duration-200" />
+          </CollapsibleTrigger>
 
-            <CollapsibleContent className="overflow-hidden data-[state=closed]:animate-collapsible-up data-[state=open]:animate-collapsible-down">
-              <HydrateClient client={queryClient}>
-                <WorkspaceMemberList />
-              </HydrateClient>
-            </CollapsibleContent>
-          </Collapsible>
-        </div>
+          <CollapsibleContent className="overflow-hidden data-[state=closed]:animate-collapsible-up data-[state=open]:animate-collapsible-down">
+            <HydrateClient client={queryClient}>
+              <WorkspaceMemberList />
+            </HydrateClient>
+          </CollapsibleContent>
+        </Collapsible>
       </div>
 
       {children}

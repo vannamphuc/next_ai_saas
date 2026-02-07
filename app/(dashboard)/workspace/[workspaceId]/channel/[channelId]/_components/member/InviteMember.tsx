@@ -22,13 +22,14 @@ import { Input } from '@/components/ui/input'
 import { orpc } from '@/lib/orpc'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { UserPlus } from 'lucide-react'
+import { Loader, UserPlus } from 'lucide-react'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 
 const InviteMember = () => {
   const [open, setOpen] = useState(false)
+  const queryClient = useQueryClient()
 
   const form = useForm({
     resolver: zodResolver(inviteMemberSchema),
@@ -44,6 +45,9 @@ const InviteMember = () => {
         toast.success('Member invited successfully')
         form.reset()
         setOpen(false)
+        queryClient.invalidateQueries({
+          queryKey: orpc.workspace.member.list.queryKey(),
+        })
       },
       onError: (error) => {
         toast.error(error.message)
@@ -101,7 +105,12 @@ const InviteMember = () => {
               )}
             />
 
-            <Button type="submit">Send invitation</Button>
+            <Button type="submit" disabled={inviteMemberMutation.isPending}>
+              {inviteMemberMutation.isPending && (
+                <Loader className="animate-spin size-4" />
+              )}
+              Send invitation
+            </Button>
           </form>
         </Form>
       </DialogContent>

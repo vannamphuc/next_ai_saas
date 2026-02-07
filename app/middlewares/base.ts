@@ -22,4 +22,8 @@ export const base = os.$context<{ request: Request }>().errors({
   INTERNAL_SERVER_ERROR: {
     message: 'An unexpected error occurred on the server.',
   },
+  USER_ALREADY_EXISTS: {
+    message: 'User already exists.',
+    status: 400,
+  },
 })

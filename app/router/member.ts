@@ -48,7 +48,7 @@ export const inviteMember = base
         },
       })
     } catch {
-      throw errors.INTERNAL_SERVER_ERROR()
+      throw errors.USER_ALREADY_EXISTS()
     }
   })
 
@@ -56,7 +56,7 @@ export const listMember = base
   .use(requiredAuthMiddleware)
   .use(requiredWorkspaceMiddleware)
   .use(standardSecurityMiddlewae)
-  .use(readSecurityMiddleware)
+  // .use(readSecurityMiddleware)
   .route({
     method: 'GET',
     path: '/workspace/members',

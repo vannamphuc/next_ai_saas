@@ -3,17 +3,15 @@
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { getAvatar } from '@/lib/get-avatar'
 import { orpc } from '@/lib/orpc'
-import { useSuspenseQuery } from '@tanstack/react-query'
+import { useQuery } from '@tanstack/react-query'
 import Image from 'next/image'
 
 export const WorkspaceMemberList = () => {
-  const {
-    data: { members },
-  } = useSuspenseQuery(orpc.channel.list.queryOptions())
+  const { data } = useQuery(orpc.workspace.member.list.queryOptions())
 
   return (
-    <div className="space-y-0.5 py-1">
-      {members.map((member) => (
+    <div className="max-h-80 overflow-y-auto px-4 py-2 border border-border">
+      {data?.map((member) => (
         <div
           key={member.id}
           className="px-3 py-2 hover:bg-accent cursor-pointer transition-colors flex items-center space-x-3"
