@@ -12,11 +12,11 @@ import {
 } from '@/components/ui/form'
 import { Mesage } from '@/lib/generated/prisma/client'
 import { orpc } from '@/lib/orpc'
+import { InfiniteMessages } from '@/lib/type'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
-import { InfiniteMessages } from '../message/MessageInputForm'
 
 interface EditMessageProps {
   message: Mesage

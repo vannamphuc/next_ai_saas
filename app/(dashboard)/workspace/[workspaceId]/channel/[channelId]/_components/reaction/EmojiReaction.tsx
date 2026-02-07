@@ -5,11 +5,9 @@ import {
   EmojiPickerFooter,
   EmojiPickerSearch,
 } from '@/components/ui/emoji-picker'
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from '@/components/ui/popover'
+import { Popover, PopoverTrigger } from '@/components/ui/popover'
+import * as PopoverPrimitive from '@radix-ui/react-popover'
+import { cn } from '@/lib/utils'
 import { SmilePlus } from 'lucide-react'
 import { useState } from 'react'
 
@@ -22,7 +20,7 @@ export const EmojiReaction = ({ onSelect }: EmojiReactionProps) => {
 
   const handleEmojiSelect = (emoji: string) => {
     onSelect(emoji)
-    setOpen((prev) => !prev)
+    setOpen(false)
   }
 
   return (
@@ -32,16 +30,24 @@ export const EmojiReaction = ({ onSelect }: EmojiReactionProps) => {
           <SmilePlus className="size-4 text-muted-foreground" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-fit p-0" align="start" side="bottom">
-        <EmojiPicker
-          className="h-[300px]"
-          onEmojiSelect={(e) => handleEmojiSelect(e.emoji)}
+      {open && (
+        <PopoverPrimitive.Content
+          align="start"
+          sideOffset={4}
+          className={cn(
+            'bg-popover text-popover-foreground z-50 w-fit origin-(--radix-popover-content-transform-origin) rounded-md border p-0 shadow-md outline-hidden',
+          )}
         >
-          <EmojiPickerSearch />
-          <EmojiPickerContent />
-          <EmojiPickerFooter />
-        </EmojiPicker>
-      </PopoverContent>
+          <EmojiPicker
+            className="h-[300px]"
+            onEmojiSelect={(e) => handleEmojiSelect(e.emoji)}
+          >
+            <EmojiPickerSearch />
+            <EmojiPickerContent />
+            <EmojiPickerFooter />
+          </EmojiPicker>
+        </PopoverPrimitive.Content>
+      )}
     </Popover>
   )
 }
