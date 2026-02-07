@@ -190,7 +190,11 @@ export const ThreadSidebar = ({ user }: ThreadSidebarProps) => {
 
                 <div className="space-y-1">
                   {data.messages.map((message) => (
-                    <ThreadReply key={message.id} messages={message} />
+                    <ThreadReply
+                      key={message.id}
+                      messages={message}
+                      selectedThreadId={threadId!}
+                    />
                   ))}
                 </div>
               </div>

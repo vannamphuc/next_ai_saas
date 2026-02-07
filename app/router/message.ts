@@ -5,7 +5,13 @@ import { requiredAuthMiddleware } from '../middlewares/auth'
 import { base } from '../middlewares/base'
 import { requiredWorkspaceMiddleware } from '../middlewares/workspace'
 import prisma from '@/lib/prisma'
-import { createMessageSchema, updateMessageSchema } from '../schemas/message'
+import {
+  createMessageSchema,
+  GroupReaction,
+  groupReactionSchema,
+  messageReactionSchema,
+  updateMessageSchema,
+} from '../schemas/message'
 import { getAvatar } from '@/lib/get-avatar'
 import { Mesage } from '@/lib/generated/prisma/client'
 import { readSecurityMiddleware } from '../middlewares/arcject/read'
@@ -132,12 +138,25 @@ export const listMessages = base
             replies: true,
           },
         },
+        messageReactions: {
+          select: {
+            emoji: true,
+            userId: true,
+          },
+        },
       },
     })
 
     const items: MessageListItem[] = messages.map((message) => ({
       ...message,
       repliesCount: message._count.replies,
+      reactions: groupReaction(
+        message.messageReactions.map((reaction) => ({
+          emoji: reaction.emoji,
+          userId: reaction.userId,
+        })),
+        context.user.id,
+      ),
     }))
 
     const nextCursor =
@@ -222,8 +241,8 @@ export const listThreadMessages = base
   )
   .output(
     z.object({
-      parent: z.custom<Mesage>(),
-      messages: z.array(z.custom<Mesage>()),
+      parent: z.custom<MessageListItem>(),
+      messages: z.array(z.custom<MessageListItem>()),
     }),
   )
   .handler(async ({ input, context, errors }) => {
@@ -232,6 +251,19 @@ export const listThreadMessages = base
         id: input.messageId,
         Channel: {
           workspaceId: context.workspace.orgCode,
+        },
+      },
+      include: {
+        _count: {
+          select: {
+            replies: true,
+          },
+        },
+        messageReactions: {
+          select: {
+            emoji: true,
+            userId: true,
+          },
         },
       },
     })
@@ -245,20 +277,173 @@ export const listThreadMessages = base
         threadId: input.messageId,
       },
       orderBy: [{ createdAt: 'asc' }, { id: 'asc' }],
+      include: {
+        _count: {
+          select: {
+            replies: true,
+          },
+        },
+        messageReactions: {
+          select: {
+            emoji: true,
+            userId: true,
+          },
+        },
+      },
     })
 
-    const parent = {
+    const parent: MessageListItem = {
       ...message,
+      reactions: groupReaction(
+        message.messageReactions.map((reaction) => ({
+          emoji: reaction.emoji,
+          userId: reaction.userId,
+        })),
+        context.user.id,
+      ),
+      repliesCount: message._count.replies,
     }
 
     const messages = replies.map((reply) => {
       return {
         ...reply,
+        reactions: groupReaction(
+          reply.messageReactions.map((reaction) => ({
+            emoji: reaction.emoji,
+            userId: reaction.userId,
+          })),
+          context.user.id,
+        ),
+        repliesCount: reply._count.replies,
       }
     })
 
     return {
       parent,
       messages,
+    }
+  })
+
+const groupReaction = (
+  reactions: { emoji: string; userId: string }[],
+  userId: string,
+): GroupReaction[] => {
+  const reactionMap = new Map<string, { count: number; reactedByMe: boolean }>()
+
+  for (const reaction of reactions) {
+    const existing = reactionMap.get(reaction.emoji)
+    if (existing) {
+      existing.count++
+      if (reaction.userId === userId) {
+        existing.reactedByMe = true
+      }
+    } else {
+      reactionMap.set(reaction.emoji, {
+        count: 1,
+        reactedByMe: reaction.userId === userId,
+      })
+    }
+  }
+
+  return Array.from(reactionMap.entries()).map(
+    ([emoji, { count, reactedByMe }]) => ({
+      emoji,
+      count,
+      reactedByMe,
+    }),
+  )
+}
+
+export const toggleReaction = base
+  .use(requiredAuthMiddleware)
+  .use(requiredWorkspaceMiddleware)
+  .use(standardSecurityMiddlewae)
+  .use(writeSecurityMiddleware)
+  .route({
+    method: 'POST',
+    path: '/messages/:messageId/reactions',
+    summary: 'Toggle reaction',
+    tags: ['messages'],
+  })
+  .input(messageReactionSchema)
+  .output(
+    z.object({
+      messageId: z.string(),
+      reactions: z.array(groupReactionSchema),
+    }),
+  )
+  .handler(async ({ input, context, errors }) => {
+    const message = await prisma.mesage.findFirst({
+      where: {
+        id: input.messageId,
+        Channel: {
+          workspaceId: context.workspace.orgCode,
+        },
+      },
+      select: {
+        id: true,
+      },
+    })
+
+    if (!message) {
+      throw errors.NOT_FOUND()
+    }
+
+    const inserted = await prisma.messageReaction.createMany({
+      data: [
+        {
+          emoji: input.emoji,
+          mesageId: input.messageId,
+          userId: context.user.id,
+          userEmail: context.user.email!,
+          userName: context.user.given_name ?? 'Private',
+          userAvatar: getAvatar(context.user.picture, context.user.email!),
+        },
+      ],
+      skipDuplicates: true,
+    })
+
+    if (inserted.count === 0) {
+      await prisma.messageReaction.deleteMany({
+        where: {
+          mesageId: input.messageId,
+          emoji: input.emoji,
+          userId: context.user.id,
+        },
+      })
+    }
+
+    const updated = await prisma.mesage.findUnique({
+      where: {
+        id: input.messageId,
+      },
+      include: {
+        messageReactions: {
+          select: {
+            emoji: true,
+            userId: true,
+          },
+        },
+        _count: {
+          select: {
+            replies: true,
+          },
+        },
+      },
+    })
+
+    if (!updated) {
+      throw errors.NOT_FOUND()
+    }
+
+    return {
+      messageId: updated.id,
+      reactions: groupReaction(
+        (updated.messageReactions ?? []).map((r) => ({
+          emoji: r.emoji,
+          userId: r.userId,
+        })),
+        context.user.id,
+      ),
     }
   })

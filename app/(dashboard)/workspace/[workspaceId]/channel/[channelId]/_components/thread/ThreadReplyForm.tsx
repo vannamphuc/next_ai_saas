@@ -15,17 +15,12 @@ import { useForm } from 'react-hook-form'
 import { MessageComposer } from '../message/MessageComposer'
 import { useAttachmentUpload } from '@/hooks/use-attachment-upload'
 import { useEffect, useState } from 'react'
-import {
-  InfiniteData,
-  useMutation,
-  useQueryClient,
-} from '@tanstack/react-query'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { orpc } from '@/lib/orpc'
 import { toast } from 'sonner'
-import { Mesage } from '@/lib/generated/prisma/client'
 import { KindeUser } from '@kinde-oss/kinde-auth-nextjs'
 import { getAvatar } from '@/lib/get-avatar'
-import { InfiniteThreadMessages } from '@/lib/type'
+import { MessageListItem, InfiniteThreadMessages } from '@/lib/type'
 
 interface ThreadReplyFormProps {
   threadId: string
@@ -63,7 +58,7 @@ export const ThreadReplyForm = ({ threadId, user }: ThreadReplyFormProps) => {
         await queryClient.cancelQueries({ queryKey: listOptions.queryKey })
         const previousValue = queryClient.getQueryData(listOptions.queryKey)
 
-        const optimistic: Mesage = {
+        const optimistic: MessageListItem = {
           id: `optimistic:${crypto.randomUUID()}`,
           content: form.getValues('content'),
           createdAt: new Date(),
@@ -75,15 +70,24 @@ export const ThreadReplyForm = ({ threadId, user }: ThreadReplyFormProps) => {
           channelId: data.channelId,
           threadId: data.threadId!,
           imageUrl: data.imageUrl ?? null,
+          repliesCount: 0,
+          reactions: [],
         }
 
-        queryClient.setQueryData(listOptions.queryKey, (old) => {
-          if (!old) return old
-          return {
-            ...old,
-            messages: [...old.messages, optimistic],
-          }
-        })
+        queryClient.setQueryData(
+          listOptions.queryKey,
+          (
+            old:
+              | { parent: MessageListItem; messages: MessageListItem[] }
+              | undefined,
+          ) => {
+            if (!old) return old
+            return {
+              ...old,
+              messages: [...old.messages, optimistic],
+            }
+          },
+        )
 
         // Optimistically bump replies count in main message list for the parent
         queryClient.setQueryData<InfiniteThreadMessages>(

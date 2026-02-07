@@ -1,12 +1,17 @@
 import { SafeContent } from '@/components/rich-text-edior/SafeContent'
-import { Mesage } from '@/lib/generated/prisma/client'
+import { MessageListItem } from '@/lib/type'
 import Image from 'next/image'
+import { ReactionsBar } from '../reaction/ReactionsBar'
 
 interface ThreadReplyProps {
-  messages: Mesage
+  messages: MessageListItem
+  selectedThreadId: string
 }
 
-export const ThreadReply = ({ messages }: ThreadReplyProps) => {
+export const ThreadReply = ({
+  messages,
+  selectedThreadId,
+}: ThreadReplyProps) => {
   return (
     <div className="flex space-x-3 p-3 hover:bg-muted/30 rounded-lg">
       <Image
@@ -48,6 +53,15 @@ export const ThreadReply = ({ messages }: ThreadReplyProps) => {
             />
           </div>
         )}
+
+        <ReactionsBar
+          messageId={messages.id}
+          reactions={messages.reactions}
+          context={{
+            type: 'thread',
+            threadId: selectedThreadId,
+          }}
+        />
       </div>
     </div>
   )

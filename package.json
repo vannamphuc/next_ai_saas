@@ -10,7 +10,8 @@
     "db": "pnpm dlx prisma db",
     "check": "prettier --write . && eslint --fix",
     "prisma:generate": "pnpm dlx prisma generate",
-    "prisma:studio": "pnpm dlx prisma studio"
+    "prisma:studio": "pnpm dlx prisma studio",
+    "ui": "pnpm dlx shadcn@latest"
   },
   "dependencies": {
     "@arcjet/inspect": "^1.0.0",
@@ -47,6 +48,7 @@
     "clsx": "^2.1.1",
     "dompurify": "^3.3.1",
     "dotenv": "^17.2.3",
+    "frimousse": "^0.3.0",
     "html-react-parser": "^5.2.15",
     "lowlight": "^3.3.0",
     "lucide-react": "^0.563.0",
