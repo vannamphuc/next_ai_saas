@@ -93,6 +93,21 @@ export const ChannelRealtimeProvider = ({
             break
           case 'reaction:updated':
             const { messageId, reactions } = payload
+
+            // Check if there's a pending mutation for this message
+            // If yes, skip socket update to avoid race condition
+            const mutationCache = queryClient.getMutationCache()
+            const pendingMutations = mutationCache.findAll({
+              predicate: (mutation) =>
+                mutation.state.status === 'pending' &&
+                mutation.options.mutationKey?.[0] === 'message.reaction.toggle',
+            })
+
+            if (pendingMutations.length > 0) {
+              // Let the mutation's onSuccess handle the update
+              return
+            }
+
             queryClient.setQueryData<MessageListInfiniteData>(
               ['messages.list', channelId],
               (oldData) => {

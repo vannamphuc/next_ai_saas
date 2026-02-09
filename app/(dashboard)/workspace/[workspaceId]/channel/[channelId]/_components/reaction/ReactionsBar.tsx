@@ -31,23 +31,7 @@ export const ReactionsBar = ({
 
   const toggleMutation = useMutation(
     orpc.message.reaction.toggle.mutationOptions({
-      onMutate: async (vars: { messageId: string; emoji: string }) => {
-        const bump = (rxns: GroupReaction[]) => {
-          const found = rxns.find((r) => r.emoji === vars.emoji)
-          if (found) {
-            const updated = rxns.map((r) =>
-              r.emoji === vars.emoji
-                ? {
-                    ...r,
-                    count: r.reactedByMe ? r.count - 1 : r.count + 1,
-                    reactedByMe: !r.reactedByMe,
-                  }
-                : r,
-            )
-            return updated.filter((r) => r.count > 0)
-          }
-          return [...rxns, { emoji: vars.emoji, count: 1, reactedByMe: true }]
-        }
+      onMutate: async () => {
         const isThread = context && context.type === 'thread'
 
         if (isThread) {
@@ -58,30 +42,6 @@ export const ReactionsBar = ({
           })
           await queryClient.cancelQueries({ queryKey: listOptions.queryKey })
           const previousThread = queryClient.getQueryData(listOptions.queryKey)
-          queryClient.setQueryData(listOptions.queryKey, (old) => {
-            if (!old) return old
-
-            if (vars.messageId === context.threadId) {
-              return {
-                ...old,
-                parent: {
-                  ...old.parent,
-                  reactions: bump(old.parent.reactions),
-                },
-              }
-            }
-
-            return {
-              ...old,
-              messages: old.messages.map((m) => {
-                if (m.id !== vars.messageId) return m
-                return {
-                  ...m,
-                  reactions: bump(m.reactions),
-                }
-              }),
-            }
-          })
 
           return {
             previousThread,
@@ -93,33 +53,72 @@ export const ReactionsBar = ({
         await queryClient.cancelQueries({ queryKey: listKey })
         const previousMessages = queryClient.getQueryData(listKey)
 
-        queryClient.setQueryData<InfiniteThreadMessages>(listKey, (old) => {
-          if (!old) return old
-          const pages = old.pages.map((page) => ({
-            ...page,
-            items: page.items.map((m) => {
-              if (m.id !== vars.messageId) return m
-              return {
-                ...m,
-                reactions: bump(m.reactions),
-              }
-            }),
-          }))
-          return { ...old, pages }
-        })
-
         return {
           listKey,
           previousMessages,
         }
       },
       onSuccess: (data) => {
-        if (context?.type === 'thread' && threadRealtime) {
-          threadRealtime.updateThreadReaction(messageId, data.reactions)
+        // Update local cache with server response
+        const isThread = context && context.type === 'thread'
+
+        if (isThread) {
+          const listOptions = orpc.message.thread.list.queryOptions({
+            input: {
+              messageId: context.threadId,
+            },
+          })
+
+          queryClient.setQueryData(listOptions.queryKey, (old) => {
+            if (!old) return old
+
+            if (data.messageId === context.threadId) {
+              return {
+                ...old,
+                parent: {
+                  ...old.parent,
+                  reactions: data.reactions,
+                },
+              }
+            }
+
+            return {
+              ...old,
+              messages: old.messages.map((m) => {
+                if (m.id !== data.messageId) return m
+                return {
+                  ...m,
+                  reactions: data.reactions,
+                }
+              }),
+            }
+          })
+
+          // Broadcast to other clients via socket
+          if (threadRealtime) {
+            threadRealtime.updateThreadReaction(data.messageId, data.reactions)
+          }
         } else {
-          updateReaction(messageId, data.reactions)
+          const listKey = ['messages.list', channelId]
+
+          queryClient.setQueryData<InfiniteThreadMessages>(listKey, (old) => {
+            if (!old) return old
+            const pages = old.pages.map((page) => ({
+              ...page,
+              items: page.items.map((m) => {
+                if (m.id !== data.messageId) return m
+                return {
+                  ...m,
+                  reactions: data.reactions,
+                }
+              }),
+            }))
+            return { ...old, pages }
+          })
+
+          // Broadcast to other clients via socket
+          updateReaction(data.messageId, data.reactions)
         }
-        return toast.success('Reaction toggled')
       },
       onError: (_err, _vars, ctx) => {
         if (!ctx) return
