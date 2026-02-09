@@ -1,7 +1,7 @@
 'use client'
 import Link from 'next/link'
 import { Menu, X } from 'lucide-react'
-import { Button, buttonVariants } from '@/components/ui/button'
+import { buttonVariants } from '@/components/ui/button'
 import React from 'react'
 import { cn } from '@/lib/utils'
 import Logo from '@/public/logo.webp'
@@ -23,7 +23,7 @@ const menuItems = [
 export const HeroHeader = () => {
   const [menuState, setMenuState] = React.useState(false)
   const [isScrolled, setIsScrolled] = React.useState(false)
-  const { getUser, isAuthenticated, isLoading } = useKindeBrowserClient()
+  const { getUser, isLoading } = useKindeBrowserClient()
   const user = getUser()
 
   React.useEffect(() => {
@@ -53,9 +53,14 @@ export const HeroHeader = () => {
                 aria-label="home"
                 className="flex items-center space-x-2"
               >
-                <Image src={Logo} alt="TailFlow Logo" width={32} height={32} />
+                <Image
+                  src={Logo}
+                  alt="Van Nam Phuc Logo"
+                  width={32}
+                  height={32}
+                />
                 <h1 className="text-2xl font-bold">
-                  Tail<span className="text-primary">Flow</span>
+                  Van<span className="text-primary">Nam Phuc</span>
                 </h1>
               </Link>
               <button

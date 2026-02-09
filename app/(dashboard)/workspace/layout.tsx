@@ -47,7 +47,7 @@ const WorkspaceLayout = async ({ children }: { children: React.ReactNode }) => {
               {sidebarContent(true)}
             </div>
           </MobileSidebar>
-          <span className="text-sm font-bold tracking-tight">TailFlow</span>
+          <span className="text-sm font-bold tracking-tight">Van Nam Phuc</span>
         </div>
 
         <div className="flex-1 overflow-hidden">{children}</div>
