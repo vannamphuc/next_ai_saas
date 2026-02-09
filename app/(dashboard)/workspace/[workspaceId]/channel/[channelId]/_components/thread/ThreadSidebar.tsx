@@ -8,10 +8,10 @@ import { useQuery } from '@tanstack/react-query'
 import { orpc } from '@/lib/orpc'
 import { SafeContent } from '@/components/rich-text-edior/SafeContent'
 import { KindeUser } from '@kinde-oss/kinde-auth-nextjs'
-import { Skeleton } from '@/components/ui/skeleton'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { ThreadSkeleton } from './ThreadSkeleton'
 import { SummaryThread } from './SummaryThread'
+import { ThreadRealtimeProvider } from '@/providers/ThreadRealtimeProvider'
 
 interface ThreadSidebarProps {
   user: KindeUser<Record<string, unknown>>
@@ -122,106 +122,112 @@ export const ThreadSidebar = ({ user }: ThreadSidebarProps) => {
     setIsAtBottom(isNearBottom(el))
   }
 
+  if (!threadId) return null
+
   return (
-    <div className="w-[32rem] border-l flex flex-col h-full">
-      <div className="border-b h-14 px-4 flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <MessageSquare className="size-4" />
-          <span>Thread</span>
+    <ThreadRealtimeProvider threadId={threadId}>
+      <div className="w-[32rem] border-l flex flex-col h-full">
+        <div className="border-b h-14 px-4 flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <MessageSquare className="size-4" />
+            <span>Thread</span>
+          </div>
+
+          <div className="flex items-center gap-2">
+            <SummaryThread messageId={threadId} />
+            <Button variant="outline" size="icon" onClick={closeThread}>
+              <X className="size-4" />
+            </Button>
+          </div>
         </div>
 
-        <div className="flex items-center gap-2">
-          <SummaryThread messageId={threadId!} />
-          <Button variant="outline" size="icon" onClick={closeThread}>
-            <X className="size-4" />
-          </Button>
-        </div>
-      </div>
-
-      {/* Main Content */}
-      <div className="flex-1 overflow-y-auto relative">
-        <div
-          ref={scrollRef}
-          onScroll={handleScroll}
-          className="h-full overflow-y-auto"
-        >
-          {isLoading ? (
-            <ThreadSkeleton />
-          ) : data ? (
-            <>
-              <div className="p-4 border-b bg-muted/20">
-                <div className="flex space-x-2">
-                  <Image
-                    src={data.parent.authorAvatar}
-                    alt={data.parent.authorName}
-                    width={32}
-                    height={32}
-                    className="size-8 rounded-full shrink-0"
-                  />
-
-                  <div className="flex-1 space-y-1 min-w-0">
-                    <div className="flex items-center space-x-2">
-                      <span className="font-medium text-sm">
-                        {data.parent.authorName}
-                      </span>
-
-                      <span className="text-xs text-muted-foreground">
-                        {new Intl.DateTimeFormat('en-US', {
-                          hour: 'numeric',
-                          minute: 'numeric',
-                          hour12: true,
-                          month: 'short',
-                          day: 'numeric',
-                        }).format(data.parent.createdAt)}
-                      </span>
-                    </div>
-
-                    <SafeContent
-                      className="text-sm wrap-break-word prose dark:prose-invert max-w-none marker:text-primary"
-                      content={JSON.parse(data.parent.content)}
+        {/* Main Content */}
+        <div className="flex-1 overflow-y-auto relative">
+          <div
+            ref={scrollRef}
+            onScroll={handleScroll}
+            className="h-full overflow-y-auto"
+          >
+            {isLoading ? (
+              <ThreadSkeleton />
+            ) : data ? (
+              <>
+                <div className="p-4 border-b bg-muted/20">
+                  <div className="flex space-x-2">
+                    <Image
+                      src={data.parent.authorAvatar}
+                      alt={data.parent.authorName}
+                      width={32}
+                      height={32}
+                      className="size-8 rounded-full shrink-0"
                     />
+
+                    <div className="flex-1 space-y-1 min-w-0">
+                      <div className="flex items-center space-x-2">
+                        <span className="font-medium text-sm">
+                          {data.parent.authorName}
+                        </span>
+
+                        <span className="text-xs text-muted-foreground">
+                          {new Intl.DateTimeFormat('en-US', {
+                            hour: 'numeric',
+                            minute: 'numeric',
+                            hour12: true,
+                            month: 'short',
+                            day: 'numeric',
+                          }).format(data.parent.createdAt)}
+                        </span>
+                      </div>
+
+                      <SafeContent
+                        className="text-sm wrap-break-word prose dark:prose-invert max-w-none marker:text-primary"
+                        content={JSON.parse(data.parent.content)}
+                      />
+                    </div>
                   </div>
                 </div>
-              </div>
 
-              {/* Thread Replies */}
-              <div className="p-2">
-                <p className="text-xs text-muted-foreground mb-3 px-2">
-                  {data.messages.length} replies
-                </p>
+                {/* Thread Replies */}
+                <div className="p-2">
+                  <p className="text-xs text-muted-foreground mb-3 px-2">
+                    {data.messages.length} replies
+                  </p>
 
-                <div className="space-y-1">
-                  {data.messages.map((message) => (
-                    <ThreadReply
-                      key={message.id}
-                      messages={message}
-                      selectedThreadId={threadId!}
-                    />
-                  ))}
+                  <div className="space-y-1">
+                    {data.messages.map((message) => (
+                      <ThreadReply
+                        key={message.id}
+                        messages={message}
+                        selectedThreadId={threadId}
+                      />
+                    ))}
+                  </div>
                 </div>
-              </div>
-            </>
-          ) : null}
-          <div ref={bottomRef} />
+              </>
+            ) : null}
+            <div ref={bottomRef} />
+          </div>
+
+          {/* Scroll to bottom button */}
+          {!isAtBottom && (
+            <Button
+              type="button"
+              size="sm"
+              className="absolute bottom-4 right-5 z-20 size-10 rounded-full hover:shadow-xl transition-all duration-200"
+              onClick={() =>
+                bottomRef.current?.scrollIntoView({ block: 'end' })
+              }
+            >
+              <ArrowDown className="size-4" />
+            </Button>
+          )}
         </div>
 
-        {/* Scroll to bottom button */}
-        {!isAtBottom && (
-          <Button
-            type="button"
-            size="sm"
-            className="absolute bottom-4 right-5 z-20 size-10 rounded-full hover:shadow-xl transition-all duration-200"
-            onClick={() => bottomRef.current?.scrollIntoView({ block: 'end' })}
-          >
-            <ArrowDown className="size-4" />
-          </Button>
-        )}
+        {/* Thread reply form */}
+        <div className="border-t p-4">
+          <ThreadReplyForm threadId={threadId} user={user} />
+        </div>
       </div>
-
-      {/* Thread reply form */}
-      <div className="border-t p-4">
-        <ThreadReplyForm threadId={threadId!} user={user} />
-      </div>
-    </div>
+    </ThreadRealtimeProvider>
   )
 }

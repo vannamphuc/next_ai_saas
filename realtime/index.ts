@@ -2,6 +2,7 @@ import {
   channelEventSchema,
   PresenceSchema,
   presenceSchema,
+  threadEventSchema,
   userSchema,
 } from '@/app/schemas/realtime'
 import { Connection, routePartykitRequest, Server } from 'partyserver'
@@ -61,13 +62,21 @@ export class Chat extends Server {
             this.updateUsers()
             break
         }
-        return // Handled as presence event
+        return
       }
 
       // Try to parse as channel event
       const channelEvent = channelEventSchema.safeParse(parsedMessage)
       if (channelEvent.success) {
         const payload = JSON.stringify(channelEvent.data)
+        this.broadcast(payload, [connection.id]) // Don't send back to sender
+        return
+      }
+
+      // Thread event
+      const threadEvent = threadEventSchema.safeParse(parsedMessage)
+      if (threadEvent.success) {
+        const payload = JSON.stringify(threadEvent.data)
         this.broadcast(payload, [connection.id]) // Don't send back to sender
         return
       }
