@@ -30,33 +30,37 @@ const ChannelPageMain = () => {
 
   return (
     <ChannelRealtimeProvider channelId={channelId}>
-      <div className="flex h-screen w-full flex-1">
-        <div className="flex flex-col flex-1 min-w-0">
-          {/* Fixed Header */}
-          {isLoading ? (
-            <div className="flex items-center justify-between h-14 px-4 border-b">
-              <Skeleton className="h-6  w-40" />
-              <div className="flex items-center gap-2">
-                <Skeleton className="h-8  w-28" />
-                <Skeleton className="h-8  w-20" />
-                <Skeleton className="h-8  w-8" />
+      <div className="flex h-full w-full flex-1 overflow-hidden">
+        <div className="flex flex-col flex-1 min-w-0 h-full bg-background">
+          {/* Fixed Header - Hidden on Mobile */}
+          <div className="hidden md:block">
+            {isLoading ? (
+              <div className="flex items-center justify-between h-14 px-4 border-b">
+                <Skeleton className="h-6 w-40" />
+                <div className="flex items-center gap-2">
+                  <Skeleton className="h-8 w-28" />
+                  <Skeleton className="h-8 w-20" />
+                  <Skeleton className="h-8 w-8" />
+                </div>
               </div>
-            </div>
-          ) : (
-            <ChannelHeader channelName={data?.channelName} />
-          )}
+            ) : (
+              <ChannelHeader channelName={data?.channelName} />
+            )}
+          </div>
 
           {/* Scrollable Messages Area */}
-          <div className="flex-1 overflow-hidden mb-4">
+          <div className="flex-1 overflow-y-auto min-h-0">
             <MessageList />
           </div>
 
-          {/* Fixed Input */}
-          <div className="border-t bg-background p-4">
-            <MessageInputForm
-              channelId={channelId}
-              user={data?.currentUser as KindeUser<Record<string, unknown>>}
-            />
+          {/* Fixed Input area - Syncing with Thread input style */}
+          <div className="border-t bg-background p-2 md:p-4">
+            <div className="max-w-[1200px] mx-auto w-full">
+              <MessageInputForm
+                channelId={channelId}
+                user={data?.currentUser as KindeUser<Record<string, unknown>>}
+              />
+            </div>
           </div>
         </div>
 

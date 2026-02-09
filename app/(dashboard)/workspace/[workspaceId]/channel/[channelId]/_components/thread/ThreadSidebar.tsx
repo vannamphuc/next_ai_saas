@@ -124,13 +124,13 @@ export const ThreadSidebar = ({ user }: ThreadSidebarProps) => {
 
   if (!threadId) return null
 
-  return (
+  const threadContent = (
     <ThreadRealtimeProvider threadId={threadId}>
-      <div className="w-[32rem] border-l flex flex-col h-full">
-        <div className="border-b h-14 px-4 flex items-center justify-between">
+      <div className="w-full md:w-lg border-l flex flex-col h-full">
+        <div className="border-b h-14 px-2 md:px-4 flex items-center justify-between">
           <div className="flex items-center gap-2">
             <MessageSquare className="size-4" />
-            <span>Thread</span>
+            <span className="text-sm md:text-base">Thread</span>
           </div>
 
           <div className="flex items-center gap-2">
@@ -152,7 +152,7 @@ export const ThreadSidebar = ({ user }: ThreadSidebarProps) => {
               <ThreadSkeleton />
             ) : data ? (
               <>
-                <div className="p-4 border-b bg-muted/20">
+                <div className="p-2 md:p-4 border-b bg-muted/20">
                   <div className="flex space-x-2">
                     <Image
                       src={data.parent.authorAvatar}
@@ -224,10 +224,22 @@ export const ThreadSidebar = ({ user }: ThreadSidebarProps) => {
         </div>
 
         {/* Thread reply form */}
-        <div className="border-t p-4">
+        <div className="border-t p-2 md:p-4">
           <ThreadReplyForm threadId={threadId} user={user} />
         </div>
       </div>
     </ThreadRealtimeProvider>
+  )
+
+  return (
+    <>
+      {/* Desktop Thread Sidebar */}
+      <div className="hidden md:block">{threadContent}</div>
+
+      {/* Mobile Thread Sidebar - Full Screen Overlay */}
+      <div className="md:hidden fixed inset-0 z-50 bg-background">
+        {threadContent}
+      </div>
+    </>
   )
 }

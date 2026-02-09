@@ -24,7 +24,7 @@ const WorkspaceIdPage = async ({ params }: IAppProps) => {
   }
 
   return (
-    <div className="p-5 flex flex-1">
+    <div className="p-2 md:p-5 flex flex-1">
       <Empty>
         <EmptyHeader>
           <EmptyMedia variant="icon">

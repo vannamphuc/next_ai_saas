@@ -58,37 +58,62 @@ const getWorkspaceColor = (workspaceId: string) => {
   return colorCombinations[colorIndex]
 }
 
-export const WorkspaceList = () => {
+export const WorkspaceList = ({ showName = false }: { showName?: boolean }) => {
   const {
     data: { workspaces, currentWorkspace },
   } = useSuspenseQuery(orpc.workspace.list.queryOptions())
 
   return (
     <TooltipProvider>
-      <div className="flex flex-col gap-2">
+      <div className="flex flex-col gap-3 w-full">
         {workspaces.map((workspace) => {
           const isActive = workspace.id === currentWorkspace.orgCode
           return (
             <Tooltip key={workspace.id}>
               <TooltipTrigger asChild>
-                <LoginLink orgCode={workspace.id}>
+                <LoginLink orgCode={workspace.id} className="w-full">
                   <Button
-                    size="icon"
+                    variant={
+                      showName ? (isActive ? 'secondary' : 'ghost') : 'default'
+                    }
                     className={cn(
-                      'size-12 transition-all duration-200',
-                      getWorkspaceColor(workspace.id),
+                      'transition-all duration-200 w-full justify-start',
+                      showName
+                        ? 'h-12 px-3 gap-3'
+                        : 'size-12 p-0 justify-center',
+                      !showName && getWorkspaceColor(workspace.id),
+                      showName && isActive && 'bg-accent',
                     )}
                   >
-                    <span className="text-sm font-semibold">
+                    <div
+                      className={cn(
+                        'size-8 shrink-0 rounded-md flex items-center justify-center font-semibold text-sm text-white',
+                        getWorkspaceColor(workspace.id),
+                      )}
+                    >
                       {workspace.avatar}
-                    </span>
+                    </div>
+                    {showName && (
+                      <span
+                        className={cn(
+                          'font-medium truncate flex-1 text-left',
+                          isActive
+                            ? 'text-foreground'
+                            : 'text-muted-foreground',
+                        )}
+                      >
+                        {workspace.name}
+                      </span>
+                    )}
                   </Button>
                 </LoginLink>
               </TooltipTrigger>
-              <TooltipContent side="right">
-                {workspace.name}
-                {isActive && ' (Current)'}
-              </TooltipContent>
+              {!showName && (
+                <TooltipContent side="right">
+                  {workspace.name}
+                  {isActive && ' (Current)'}
+                </TooltipContent>
+              )}
             </Tooltip>
           )
         })}
