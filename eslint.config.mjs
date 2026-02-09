@@ -14,6 +14,7 @@ const eslintConfig = defineConfig([
     'next-env.d.ts',
     'lib/generated/prisma/**',
     '.wrangler/**',
+    'worker-configuration.d.ts',
   ]),
 ])
 
