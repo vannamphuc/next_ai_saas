@@ -13,13 +13,30 @@ import { Search, Users } from 'lucide-react'
 import { useMemo, useState } from 'react'
 import { MemberItem } from './MemberItem'
 import { Skeleton } from '@/components/ui/skeleton'
+import { usePresence } from '@/hooks/use-presence'
+import { useParams } from 'next/navigation'
+import { UserSchema } from '@/app/schemas/realtime'
 
 export const MemberOverView = () => {
+  const { workspaceId } = useParams<{ workspaceId: string }>()
   const [open, setOpen] = useState(false)
   const [search, setSearch] = useState('')
   const { data, isLoading, error } = useQuery(
     orpc.workspace.member.list.queryOptions(),
   )
+  const { data: workspaceData } = useQuery(orpc.workspace.list.queryOptions())
+  const currentUser = useMemo(() => {
+    if (!workspaceData?.user) {
+      return null
+    }
+
+    return {
+      id: workspaceData.user.id,
+      email: workspaceData.user.email,
+      full_name: workspaceData.user.given_name ?? workspaceData.user.email!,
+      picture: workspaceData.user.picture,
+    } satisfies UserSchema
+  }, [workspaceData])
 
   const query = search.trim().toLowerCase()
 
@@ -33,6 +50,15 @@ export const MemberOverView = () => {
       )
     })
   }, [data, query])
+
+  const { onlineUsers } = usePresence({
+    room: `workspace-${workspaceId}`,
+    currentUser: currentUser,
+  })
+
+  const onlineUserIds = useMemo(() => {
+    return new Set(onlineUsers.map((user) => user.id))
+  }, [onlineUsers])
 
   if (error) {
     return <p>Error: {error.message}</p>
@@ -86,7 +112,11 @@ export const MemberOverView = () => {
               </p>
             ) : (
               filteredMembers.map((member) => (
-                <MemberItem key={member.id} member={member} />
+                <MemberItem
+                  key={member.id}
+                  member={member}
+                  online={member.id ? onlineUserIds.has(member.id) : false}
+                />
               ))
             )}
           </div>

@@ -11,6 +11,7 @@ import { Skeleton } from '@/components/ui/skeleton'
 import { ThreadSidebar } from './_components/thread/ThreadSidebar'
 import { ThreadProvider, useThread } from '@/providers/ThreadProvider'
 import { Activity } from 'react'
+import { ChannelRealtimeProvider } from '@/providers/ChannelRealtimeProvider'
 
 const ChannelPageMain = () => {
   const { channelId } = useParams<{ channelId: string }>()
@@ -28,42 +29,44 @@ const ChannelPageMain = () => {
   }
 
   return (
-    <div className="flex h-screen w-full flex-1">
-      <div className="flex flex-col flex-1 min-w-0">
-        {/* Fixed Header */}
-        {isLoading ? (
-          <div className="flex items-center justify-between h-14 px-4 border-b">
-            <Skeleton className="h-6  w-40" />
-            <div className="flex items-center gap-2">
-              <Skeleton className="h-8  w-28" />
-              <Skeleton className="h-8  w-20" />
-              <Skeleton className="h-8  w-8" />
+    <ChannelRealtimeProvider channelId={channelId}>
+      <div className="flex h-screen w-full flex-1">
+        <div className="flex flex-col flex-1 min-w-0">
+          {/* Fixed Header */}
+          {isLoading ? (
+            <div className="flex items-center justify-between h-14 px-4 border-b">
+              <Skeleton className="h-6  w-40" />
+              <div className="flex items-center gap-2">
+                <Skeleton className="h-8  w-28" />
+                <Skeleton className="h-8  w-20" />
+                <Skeleton className="h-8  w-8" />
+              </div>
             </div>
-          </div>
-        ) : (
-          <ChannelHeader channelName={data?.channelName} />
-        )}
+          ) : (
+            <ChannelHeader channelName={data?.channelName} />
+          )}
 
-        {/* Scrollable Messages Area */}
-        <div className="flex-1 overflow-hidden mb-4">
-          <MessageList />
+          {/* Scrollable Messages Area */}
+          <div className="flex-1 overflow-hidden mb-4">
+            <MessageList />
+          </div>
+
+          {/* Fixed Input */}
+          <div className="border-t bg-background p-4">
+            <MessageInputForm
+              channelId={channelId}
+              user={data?.currentUser as KindeUser<Record<string, unknown>>}
+            />
+          </div>
         </div>
 
-        {/* Fixed Input */}
-        <div className="border-t bg-background p-4">
-          <MessageInputForm
-            channelId={channelId}
+        <Activity mode={isThreadOpen ? 'visible' : 'hidden'}>
+          <ThreadSidebar
             user={data?.currentUser as KindeUser<Record<string, unknown>>}
           />
-        </div>
+        </Activity>
       </div>
-
-      <Activity mode={isThreadOpen ? 'visible' : 'hidden'}>
-        <ThreadSidebar
-          user={data?.currentUser as KindeUser<Record<string, unknown>>}
-        />
-      </Activity>
-    </div>
+    </ChannelRealtimeProvider>
   )
 }
 

@@ -1,4 +1,5 @@
 import {
+  channelEventSchema,
   PresenceSchema,
   presenceSchema,
   userSchema,
@@ -36,36 +37,39 @@ export class Chat extends Server {
   }
 
   onMessage(connection: Connection, message: string) {
-    // console.log('Message from', connection.id, ':', message)
-    // // Send the message to every other connection
-    // this.broadcast(message, [connection.id])
-
     try {
       const parsedMessage = JSON.parse(message)
-      const validatedMessage = presenceSchema.safeParse(parsedMessage)
 
-      if (!validatedMessage.success) {
-        return
+      // Try to parse as presence event first
+      const validatedPresence = presenceSchema.safeParse(parsedMessage)
+      if (validatedPresence.success) {
+        const { type, payload } = validatedPresence.data
+        switch (type) {
+          case 'add-user':
+            // store user info on the connection
+            this.setConnectionState(connection, { user: payload })
+            // Broadcast updated presence to all clients
+            this.updateUsers()
+            break
+          case 'remove-user':
+            // remove user
+            this.setConnectionState(connection, { user: null })
+            this.updateUsers()
+            break
+          case 'presence':
+            // broadcast presence to all connections
+            this.updateUsers()
+            break
+        }
+        return // Handled as presence event
       }
 
-      const { type, payload } = validatedMessage.data
-
-      switch (type) {
-        case 'add-user':
-          // store user info on the connection
-          this.setConnectionState(connection, { user: payload })
-          // Broadcast updated presence to all clients
-          this.updateUsers()
-          break
-        case 'remove-user':
-          // remove user
-          this.setConnectionState(connection, { user: null })
-          this.updateUsers()
-          break
-        case 'presence':
-          // broadcast presence to all connections
-          this.updateUsers()
-          break
+      // Try to parse as channel event
+      const channelEvent = channelEventSchema.safeParse(parsedMessage)
+      if (channelEvent.success) {
+        const payload = JSON.stringify(channelEvent.data)
+        this.broadcast(payload, [connection.id]) // Don't send back to sender
+        return
       }
     } catch (error) {
       console.log('🚀 ~ Chat ~ onMessage ~ error:', error)

@@ -20,6 +20,7 @@ import { Mesage } from '@/lib/generated/prisma/client'
 import { KindeUser } from '@kinde-oss/kinde-auth-nextjs'
 import { getAvatar } from '@/lib/get-avatar'
 import { InfiniteMessages } from '@/lib/type'
+import { useChannelRealtime } from '@/providers/ChannelRealtimeProvider'
 
 interface IAppProps {
   channelId: string
@@ -30,6 +31,7 @@ export const MessageInputForm = ({ channelId, user }: IAppProps) => {
   const queryClient = useQueryClient()
   const [editorKey, setEditorKey] = useState(0)
   const upload = useAttachmentUpload()
+  const { sendMessage } = useChannelRealtime()
 
   const form = useForm({
     resolver: zodResolver(createMessageSchema),
@@ -135,10 +137,11 @@ export const MessageInputForm = ({ channelId, user }: IAppProps) => {
         })
         upload.clear()
         setEditorKey((prev) => prev + 1)
+        sendMessage(data)
         return toast.success('Message created successfully')
       },
 
-      onError: (error, _variables, context) => {
+      onError: (_error, _variables, context) => {
         if (context?.previousData) {
           queryClient.setQueryData<InfiniteMessages>(
             ['messages.list', channelId],

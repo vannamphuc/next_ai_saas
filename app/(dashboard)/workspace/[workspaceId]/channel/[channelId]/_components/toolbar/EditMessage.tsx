@@ -13,6 +13,7 @@ import {
 import { Mesage } from '@/lib/generated/prisma/client'
 import { orpc } from '@/lib/orpc'
 import { InfiniteMessages } from '@/lib/type'
+import { useChannelRealtime } from '@/providers/ChannelRealtimeProvider'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useForm } from 'react-hook-form'
@@ -30,6 +31,7 @@ export const EditMessage = ({
   onSave,
 }: EditMessageProps) => {
   const queryClient = useQueryClient()
+  const { updateMessage } = useChannelRealtime()
   const form = useForm({
     resolver: zodResolver(updateMessageSchema),
     defaultValues: {
@@ -61,6 +63,7 @@ export const EditMessage = ({
             }
           },
         )
+        updateMessage(data.message)
         toast.success('Message updated successfully')
         onSave()
       },
