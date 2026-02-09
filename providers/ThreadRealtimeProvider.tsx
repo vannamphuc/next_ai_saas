@@ -35,7 +35,7 @@ export const ThreadRealtimeProvider = ({
   })
 
   const socket = usePartySocket({
-    host: 'http://127.0.0.1:8787',
+    host: process.env.NEXT_PUBLIC_PARTYKIT_HOST,
     room: `thread-${threadId}`, // Mỗi thread là một room riêng cho performance
     party: 'chat',
 
