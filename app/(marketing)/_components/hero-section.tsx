@@ -138,8 +138,8 @@ export default function HeroSection() {
                     variant="secondary"
                     className="h-10.5 rounded-xl px-5"
                   >
-                    <Link href="/workspace" prefetch={false}>
-                      <span className="text-nowrap">Open live demo</span>
+                    <Link href="#how-it-works">
+                      <span className="text-nowrap">See how it works</span>
                     </Link>
                   </Button>
                 </AnimatedGroup>

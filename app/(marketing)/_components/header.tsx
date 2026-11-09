@@ -111,13 +111,13 @@ export const HeroHeader = () => {
             </div>
 
             <div className="absolute inset-0 m-auto hidden size-fit lg:block">
-              <ul className="flex gap-8 text-sm">
+              <ul className="flex gap-8 rounded-full border border-border/60 bg-background/85 px-6 py-3 text-sm shadow-sm shadow-black/5 backdrop-blur-md">
                 {menuItems.map((item, index) => (
                   <li key={index}>
                     <Link
                       href={item.href}
                       onClick={(event) => handleMenuItemClick(event, item.href)}
-                      className="text-muted-foreground hover:text-accent-foreground block duration-150"
+                      className="block font-medium text-foreground/90 duration-150 hover:text-primary"
                     >
                       <span>{item.name}</span>
                     </Link>
@@ -136,7 +136,7 @@ export const HeroHeader = () => {
                         onClick={(event) =>
                           handleMenuItemClick(event, item.href)
                         }
-                        className="text-muted-foreground hover:text-accent-foreground block duration-150"
+                        className="block font-medium text-foreground/90 duration-150 hover:text-foreground"
                       >
                         <span>{item.name}</span>
                       </Link>
