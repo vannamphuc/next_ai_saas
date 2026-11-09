@@ -14,7 +14,7 @@ export const ChannelHeader = ({ channelName }: ChannelHeaderProps) => {
           <Hash aria-hidden="true" className="size-4" />
         </span>
         <div className="min-w-0">
-          <p className="hidden text-[10px] font-semibold uppercase tracking-[0.14em] text-muted-foreground sm:block">
+          <p className="hidden text-[11px] font-semibold uppercase tracking-[0.14em] text-muted-foreground sm:block">
             Channel
           </p>
           <h1 className="truncate text-sm font-semibold tracking-tight text-foreground md:text-base">

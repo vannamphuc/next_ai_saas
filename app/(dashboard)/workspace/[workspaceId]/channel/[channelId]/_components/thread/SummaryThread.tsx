@@ -76,26 +76,17 @@ export const SummaryThread = ({ messageId }: SummaryThreadProps) => {
   return (
     <Popover open={open} onOpenChange={handleOpenChange}>
       <PopoverTrigger asChild>
-        <Button
-          variant="outline"
-          size="icon"
-          type="button"
-          className="relative overflow-hidden bg-linear-to-t from-violet-600 to-fuchsia-600 text-white shadow-md hover:shadow-lg focus-visible:ring-2 focus-visible:ring-ring w-fit px-2"
-        >
-          <span className="flex items-center gap-0.5">
-            <Sparkles className="size-4" />
-            <span className="text-xs font-medium">AI Summary</span>
-          </span>
+        <Button type="button" size="sm" className="w-fit">
+          <Sparkles aria-hidden="true" className="size-4" />
+          <span className="text-xs font-medium">AI Summary</span>
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-[25rem] p-0" align="end">
         <div className="flex items-center justify-between px-4 py-3 border-b">
           <div className="flex items-center gap-2">
-            <span className="relative inline-flex items-center justify-center rounded-sm bg-linear-to-r from-violet-600 to-fuchsia-600 py-1.5 px-3">
-              <Sparkles className="size-4 text-white" />
-              <span className="text-sm font-medium text-white">
-                AI Summary (Preview)
-              </span>
+            <span className="inline-flex items-center justify-center gap-1.5 rounded-sm bg-primary px-3 py-1.5 text-primary-foreground">
+              <Sparkles aria-hidden="true" className="size-4" />
+              <span className="text-sm font-medium">AI Summary (Preview)</span>
             </span>
           </div>
 

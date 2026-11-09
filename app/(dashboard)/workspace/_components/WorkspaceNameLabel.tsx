@@ -24,7 +24,7 @@ export function WorkspaceNameLabel() {
         <Building2 aria-hidden="true" className="size-4" />
       </span>
       <div className="min-w-0">
-        <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
+        <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
           {params.workspaceId ? 'Current workspace' : 'Team spaces'}
         </p>
         <p className="truncate text-sm font-semibold text-foreground">

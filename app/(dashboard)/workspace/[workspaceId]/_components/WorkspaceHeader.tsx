@@ -15,7 +15,7 @@ export const WorkspaceHeader = () => {
         <Building2 aria-hidden="true" className="size-4" />
       </span>
       <div className="min-w-0">
-        <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-sidebar-foreground/65">
+        <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-sidebar-foreground/65">
           Active workspace
         </p>
         <h2 className="truncate text-sm font-semibold text-sidebar-foreground">

@@ -126,7 +126,7 @@ export const MessageItem = ({ message, currentUserId }: IAppProps) => {
         ) : (
           <>
             <SafeContent
-              className="mt-1 text-sm leading-6 wrap-break-word prose dark:prose-invert max-w-none marker:text-primary"
+              className="mt-1 max-w-[75ch] text-sm leading-6 wrap-break-word prose dark:prose-invert marker:text-primary"
               content={message.content}
             />
 

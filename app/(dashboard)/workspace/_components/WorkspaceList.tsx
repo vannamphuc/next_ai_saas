@@ -14,32 +14,32 @@ import { useSuspenseQuery } from '@tanstack/react-query'
 
 const colorCombinations = [
   // Blue
-  'bg-blue-500 hover:bg-blue-600 text-white',
-  'bg-sky-500 hover:bg-sky-600 text-white',
-  'bg-indigo-500 hover:bg-indigo-600 text-white',
+  'bg-blue-600 hover:bg-blue-700 text-white',
+  'bg-sky-700 hover:bg-sky-800 text-white',
+  'bg-indigo-600 hover:bg-indigo-700 text-white',
 
   // Green
-  'bg-green-500 hover:bg-green-600 text-white',
-  'bg-emerald-500 hover:bg-emerald-600 text-white',
-  'bg-teal-500 hover:bg-teal-600 text-white',
+  'bg-green-700 hover:bg-green-800 text-white',
+  'bg-emerald-700 hover:bg-emerald-800 text-white',
+  'bg-teal-700 hover:bg-teal-800 text-white',
 
   // Red / Orange
-  'bg-red-500 hover:bg-red-600 text-white',
-  'bg-rose-500 hover:bg-rose-600 text-white',
-  'bg-orange-500 hover:bg-orange-600 text-white',
+  'bg-red-600 hover:bg-red-700 text-white',
+  'bg-rose-600 hover:bg-rose-700 text-white',
+  'bg-orange-700 hover:bg-orange-800 text-white',
 
   // Yellow / Amber
   'bg-amber-400 hover:bg-amber-500 text-black',
   'bg-yellow-400 hover:bg-yellow-500 text-black',
 
   // Purple / Pink
-  'bg-purple-500 hover:bg-purple-600 text-white',
-  'bg-violet-500 hover:bg-violet-600 text-white',
-  'bg-pink-500 hover:bg-pink-600 text-white',
-  'bg-fuchsia-500 hover:bg-fuchsia-600 text-white',
+  'bg-purple-600 hover:bg-purple-700 text-white',
+  'bg-violet-600 hover:bg-violet-700 text-white',
+  'bg-pink-600 hover:bg-pink-700 text-white',
+  'bg-fuchsia-700 hover:bg-fuchsia-800 text-white',
 
   // Neutral
-  'bg-slate-500 hover:bg-slate-600 text-white',
+  'bg-slate-600 hover:bg-slate-700 text-white',
   'bg-gray-700 hover:bg-gray-800 text-white',
   'bg-zinc-800 hover:bg-zinc-900 text-white',
 
