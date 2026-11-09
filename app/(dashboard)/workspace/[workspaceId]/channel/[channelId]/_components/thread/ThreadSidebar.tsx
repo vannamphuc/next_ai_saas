@@ -204,7 +204,7 @@ export const ThreadSidebar = ({ user }: ThreadSidebarProps) => {
 
                       <SafeContent
                         className="mt-1 text-sm leading-6 wrap-break-word prose dark:prose-invert max-w-none marker:text-primary"
-                        content={JSON.parse(data.parent.content)}
+                        content={data.parent.content}
                       />
                     </div>
                   </div>

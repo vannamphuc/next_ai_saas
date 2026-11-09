@@ -39,7 +39,7 @@ export const ThreadReply = ({
 
         <SafeContent
           className="mt-1 text-sm leading-6 wrap-break-word prose dark:prose-invert max-w-none marker:text-primary"
-          content={JSON.parse(messages.content)}
+          content={messages.content}
         />
 
         {messages.imageUrl && (

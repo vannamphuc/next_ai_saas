@@ -127,7 +127,7 @@ export const MessageItem = ({ message, currentUserId }: IAppProps) => {
           <>
             <SafeContent
               className="mt-1 text-sm leading-6 wrap-break-word prose dark:prose-invert max-w-none marker:text-primary"
-              content={JSON.parse(message.content)}
+              content={message.content}
             />
 
             {message.imageUrl && (
