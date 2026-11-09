@@ -96,7 +96,9 @@ export const HeroHeader = () => {
                 <span className="text-2xl font-bold">TailFlow</span>
               </Link>
               <div className="flex items-center gap-2">
-                <ThemeToggle />
+                <div className="lg:hidden">
+                  <ThemeToggle />
+                </div>
                 <button
                   onClick={() => setMenuState(!menuState)}
                   aria-label={menuState == true ? 'Close Menu' : 'Open Menu'}
@@ -143,6 +145,9 @@ export const HeroHeader = () => {
                 </ul>
               </div>
               <div className="flex w-full items-center justify-end gap-2 md:w-fit">
+                <div className="hidden lg:block">
+                  <ThemeToggle />
+                </div>
                 {!authReady ? (
                   <div
                     role="status"
