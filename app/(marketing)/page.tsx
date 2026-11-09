@@ -22,12 +22,26 @@ export const metadata: Metadata = {
     siteName: 'VPFlow',
     type: 'website',
     url: '/',
+    images: [
+      {
+        url: '/og-image.png',
+        width: 1200,
+        height: 630,
+        alt: 'VPFlow team communication preview',
+      },
+    ],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Team communication that stays in sync',
     description:
       'Bring channels, threads and AI summaries together in a calmer workspace for product teams.',
+    images: [
+      {
+        url: '/og-image.png',
+        alt: 'VPFlow team communication preview',
+      },
+    ],
   },
 }
 

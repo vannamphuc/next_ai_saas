@@ -155,7 +155,7 @@ export const ReactionsBar = ({
           onClick={() => handleToggle(reaction.emoji)}
         >
           <span>{reaction.emoji}</span>
-          <span>{reaction.count}</span>
+          <span className='text-muted-foreground'>{reaction.count}</span>
         </Button>
       ))}
       <EmojiReaction onSelect={handleToggle} />
