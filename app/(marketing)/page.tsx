@@ -19,7 +19,7 @@ export const metadata: Metadata = {
     title: 'Team communication that stays in sync',
     description:
       'Bring channels, threads and AI summaries together in a calmer workspace for product teams.',
-    siteName: 'TailFlow',
+    siteName: 'VPFlow',
     type: 'website',
     url: '/',
   },

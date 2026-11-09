@@ -88,12 +88,12 @@ export const HeroHeader = () => {
               >
                 <Image
                   src={Logo}
-                  alt="TailFlow logo"
+                  alt="VPFlow logo"
                   width={32}
                   height={32}
                   unoptimized
                 />
-                <span className="text-2xl font-bold">TailFlow</span>
+                <span className="text-2xl font-bold">VPFlow</span>
               </Link>
               <div className="flex items-center gap-2">
                 <div className="lg:hidden">

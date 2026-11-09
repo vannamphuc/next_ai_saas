@@ -1,6 +1,6 @@
 import { ImageResponse } from 'next/og'
 
-export const alt = 'TailFlow — AI-ready team communication'
+export const alt = 'VPFlow — AI-ready team communication'
 export const size = { width: 1200, height: 630 }
 export const contentType = 'image/png'
 
@@ -38,7 +38,7 @@ export default function OpenGraphImage() {
             T
           </div>
           <span style={{ fontSize: 24, fontWeight: 700, letterSpacing: -0.6 }}>
-            TailFlow
+            VPFlow
           </span>
         </div>
 

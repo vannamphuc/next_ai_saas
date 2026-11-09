@@ -13,7 +13,7 @@ const questions = [
       'A summary can turn a long thread into a short recap, helping teammates catch up on the discussion and its key takeaways.',
   },
   {
-    question: 'Can I explore TailFlow before choosing a plan?',
+    question: 'Can I explore VPFlow before choosing a plan?',
     answer:
       'Yes. Open the workspace to explore the product. Plan details are being finalized and will be shared here when they are ready.',
   },

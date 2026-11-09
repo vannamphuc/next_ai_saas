@@ -96,7 +96,7 @@ export default function HowItWorksSection() {
 
         <ScrollReveal distance={24}>
           <div
-            aria-label="Sample TailFlow conversation with an AI summary"
+            aria-label="Sample VPFlow conversation with an AI summary"
             className="overflow-hidden rounded-2xl border border-border bg-background shadow-xl shadow-foreground/5"
           >
             <div className="flex items-center justify-between border-b border-border px-5 py-4">

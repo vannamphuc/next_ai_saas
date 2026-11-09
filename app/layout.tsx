@@ -19,7 +19,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.KINDE_SITE_URL ?? 'http://localhost:3000'),
-  title: 'TailFlow — AI-ready team communication',
+  title: 'VPFlow — AI-ready team communication',
   description:
     'Channels, threads and AI summaries that keep product teams in sync.',
 }

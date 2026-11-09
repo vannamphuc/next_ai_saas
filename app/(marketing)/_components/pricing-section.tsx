@@ -23,7 +23,7 @@ export default function PricingSection() {
             Clear details, when they are ready
           </h2>
           <p className="mt-4 max-w-xl text-base leading-7 text-muted-foreground">
-            We are still finalizing plan details. You can explore the TailFlow
+            We are still finalizing plan details. You can explore the VPFlow
             workspace today and see how its core tools fit your team.
           </p>
         </ScrollReveal>
@@ -33,7 +33,7 @@ export default function PricingSection() {
             <div className="flex flex-wrap items-start justify-between gap-4">
               <div>
                 <p className="text-sm font-semibold text-primary">
-                  TAILFLOW WORKSPACE
+                  VPFlow WORKSPACE
                 </p>
                 <h3 className="mt-2 text-2xl font-semibold tracking-tight text-foreground">
                   A shared home for team conversations

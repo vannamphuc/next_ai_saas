@@ -152,7 +152,7 @@ export default function HeroSection() {
                   <Image
                     className="bg-background aspect-15/8 relative hidden rounded-2xl object-contain object-top dark:block"
                     src={HeroDark}
-                    alt="TailFlow workspace in dark mode"
+                    alt="VPFlow workspace in dark mode"
                     width="2700"
                     height="1440"
                     preload
@@ -162,7 +162,7 @@ export default function HeroSection() {
                   <Image
                     className="z-2 border-border/25 aspect-15/8 relative rounded-2xl border dark:hidden  object-contain object-top"
                     src={HeroLight}
-                    alt="TailFlow workspace in light mode"
+                    alt="VPFlow workspace in light mode"
                     width="2700"
                     height="1440"
                     preload

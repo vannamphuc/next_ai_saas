@@ -26,7 +26,7 @@ export default function SiteFooter() {
               href="/"
               className="inline-flex rounded-sm text-lg font-bold tracking-tight text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
             >
-              TailFlow
+              VPFlow
             </Link>
             <p className="mt-3 text-sm leading-6 text-muted-foreground">
               Conversations, context and decisions in one shared workspace.
@@ -72,7 +72,7 @@ export default function SiteFooter() {
         </div>
 
         <div className="mt-10 flex flex-col gap-2 border-t border-border pt-5 text-xs text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
-          <span>© {new Date().getFullYear()} TailFlow</span>
+          <span>© {new Date().getFullYear()} VPFlow</span>
           <span>Made for teams that move together.</span>
         </div>
       </div>

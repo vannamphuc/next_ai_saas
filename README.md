@@ -1,4 +1,4 @@
-# TailFlow - AI-Ready Team Communication Platform
+# VPFlow - AI-Ready Team Communication Platform
 
 <div align="center">
 
@@ -36,7 +36,7 @@
 
 ## Overview
 
-TailFlow is a modern team communication platform built with Next.js 16, featuring workspace-based organization, real-time channels, and AI-ready infrastructure. The platform provides a Slack-like experience with enterprise-grade security and type-safe APIs.
+VPFlow is a modern team communication platform built with Next.js 16, featuring workspace-based organization, real-time channels, and AI-ready infrastructure. The platform provides a Slack-like experience with enterprise-grade security and type-safe APIs.
 
 ---
 
