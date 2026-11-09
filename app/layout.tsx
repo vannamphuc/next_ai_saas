@@ -2,13 +2,13 @@ import '@/lib/orpc.server'
 import type { Metadata } from 'next'
 import { AuthProvider } from '@/providers/AuthProvider'
 import { ThemeProvider } from '@/providers/theme-provider'
-import { Geist, Geist_Mono } from 'next/font/google'
+import { Outfit, Geist_Mono } from 'next/font/google'
 import './globals.css'
 import { Providers } from '@/lib/providers'
 import { Toaster } from '@/components/ui/sonner'
 
-const geistSans = Geist({
-  variable: '--font-geist-sans',
+const outfit = Outfit({
+  variable: '--font-outfit',
   subsets: ['latin'],
 })
 
@@ -31,7 +31,7 @@ export default function RootLayout({
     <AuthProvider>
       <html lang="en" suppressHydrationWarning>
         <body
-          className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+          className={`${outfit.variable} ${geistMono.variable} antialiased`}
         >
           <ThemeProvider
             attribute="class"
