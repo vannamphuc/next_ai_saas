@@ -162,7 +162,10 @@ export const MessageInputForm = ({ channelId, user }: IAppProps) => {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)}>
+      <form
+        id="channel-message-composer"
+        onSubmit={form.handleSubmit(onSubmit)}
+      >
         <FormField
           control={form.control}
           name="content"

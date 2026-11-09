@@ -32,10 +32,18 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { orpc } from '@/lib/orpc'
 import { toast } from 'sonner'
 import { isDefinedError } from '@orpc/client'
+import { useRouter } from 'next/navigation'
 
-export const CreateWorkspace = () => {
+interface CreateWorkspaceProps {
+  triggerVariant?: 'icon' | 'button'
+}
+
+export const CreateWorkspace = ({
+  triggerVariant = 'icon',
+}: CreateWorkspaceProps) => {
   const [open, setOpen] = useState(false)
   const queryClient = useQueryClient()
+  const router = useRouter()
 
   const form = useForm({
     resolver: zodResolver(workspaceSchema),
@@ -52,6 +60,7 @@ export const CreateWorkspace = () => {
         queryClient.invalidateQueries({
           queryKey: orpc.workspace.list.queryKey(),
         })
+        router.refresh()
         setOpen(false)
         form.reset()
       },
@@ -76,24 +85,35 @@ export const CreateWorkspace = () => {
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <Tooltip>
-        <TooltipTrigger asChild>
-          <DialogTrigger asChild>
-            <Button
-              variant="ghost"
-              size="icon"
-              className="size-12 rounded-xl border-2 border-dashed border-muted-foreground/50 text-muted-foreground hover:border-muted-foreground hover:text-foreground hover:rounded-lg transition-all duration-200"
-            >
-              <Plus className="size-5" />
-            </Button>
-          </DialogTrigger>
-        </TooltipTrigger>
-        <TooltipContent side="right">
-          <p>Create Workspace</p>
-        </TooltipContent>
-      </Tooltip>
+      {triggerVariant === 'button' ? (
+        <DialogTrigger asChild>
+          <Button type="button" className="h-11 rounded-xl px-4 shadow-sm">
+            <Plus aria-hidden="true" className="size-4" />
+            Create workspace
+          </Button>
+        </DialogTrigger>
+      ) : (
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <DialogTrigger asChild>
+              <Button
+                type="button"
+                variant="ghost"
+                size="icon"
+                aria-label="Create workspace"
+                className="size-12 rounded-xl border-2 border-dashed border-muted-foreground/50 text-muted-foreground transition-all duration-200 motion-reduce:transition-none hover:rounded-lg hover:border-muted-foreground hover:text-foreground"
+              >
+                <Plus aria-hidden="true" className="size-5" />
+              </Button>
+            </DialogTrigger>
+          </TooltipTrigger>
+          <TooltipContent side="right">
+            <p>Create workspace</p>
+          </TooltipContent>
+        </Tooltip>
+      )}
 
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className="w-[calc(100%-2rem)] sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle>Create Workspace</DialogTitle>
           <DialogDescription>
@@ -110,16 +130,27 @@ export const CreateWorkspace = () => {
                 <FormItem>
                   <FormLabel>Name</FormLabel>
                   <FormControl>
-                    <Input placeholder="Work space name" {...field} />
+                    <Input
+                      className="h-11"
+                      placeholder="Workspace name"
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
 
-            <Button disabled={createWorkspace.isPending} type="submit">
+            <Button
+              disabled={createWorkspace.isPending}
+              type="submit"
+              className="h-11 w-full sm:w-auto"
+            >
               {createWorkspace.isPending && (
-                <Loader className="animate-spin size-4" />
+                <Loader
+                  aria-hidden="true"
+                  className="size-4 animate-spin motion-reduce:animate-none"
+                />
               )}
               {createWorkspace.isPending ? 'Creating...' : 'Create Workspace'}
             </Button>

@@ -60,7 +60,7 @@ export const HeroHeader = () => {
                   height={32}
                 />
                 <h1 className="text-2xl font-bold">
-                  Van<span className="text-primary">Nam Phuc</span>
+                  Van <span className="text-primary">Nam Phuc</span>
                 </h1>
               </Link>
               <button

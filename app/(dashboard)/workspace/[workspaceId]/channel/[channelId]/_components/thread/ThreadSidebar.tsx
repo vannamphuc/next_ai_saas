@@ -12,6 +12,13 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import { ThreadSkeleton } from './ThreadSkeleton'
 import { SummaryThread } from './SummaryThread'
 import { ThreadRealtimeProvider } from '@/providers/ThreadRealtimeProvider'
+import { Fragment } from 'react'
+import { getAvatar } from '@/lib/get-avatar'
+import {
+  formatMessageTimestamp,
+  getMessageDateKey,
+  MessageDateDivider,
+} from '../message/MessageItem'
 
 interface ThreadSidebarProps {
   user: KindeUser<Record<string, unknown>>
@@ -126,17 +133,27 @@ export const ThreadSidebar = ({ user }: ThreadSidebarProps) => {
 
   const threadContent = (
     <ThreadRealtimeProvider threadId={threadId}>
-      <div className="w-full md:w-lg border-l flex flex-col h-full">
-        <div className="border-b h-14 px-2 md:px-4 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <MessageSquare className="size-4" />
-            <span className="text-sm md:text-base">Thread</span>
+      <div className="flex h-full w-full flex-col border-l border-border bg-background xl:w-lg">
+        <div className="flex h-14 items-center justify-between border-b border-border px-3 md:px-4">
+          <div className="flex items-center gap-2.5">
+            <span className="flex size-8 items-center justify-center rounded-lg bg-primary/10 text-primary">
+              <MessageSquare aria-hidden="true" className="size-4" />
+            </span>
+            <span className="text-sm font-semibold tracking-tight md:text-base">
+              Thread
+            </span>
           </div>
 
           <div className="flex items-center gap-2">
             <SummaryThread messageId={threadId} />
-            <Button variant="outline" size="icon" onClick={closeThread}>
-              <X className="size-4" />
+            <Button
+              type="button"
+              variant="outline"
+              size="icon"
+              aria-label="Close thread"
+              onClick={closeThread}
+            >
+              <X aria-hidden="true" className="size-4" />
             </Button>
           </div>
         </div>
@@ -149,38 +166,44 @@ export const ThreadSidebar = ({ user }: ThreadSidebarProps) => {
             className="h-full overflow-y-auto"
           >
             {isLoading ? (
-              <ThreadSkeleton />
+              <div role="status" aria-label="Loading thread">
+                <span className="sr-only">Loading thread</span>
+                <ThreadSkeleton />
+              </div>
             ) : data ? (
               <>
-                <div className="p-2 md:p-4 border-b bg-muted/20">
-                  <div className="flex space-x-2">
+                <MessageDateDivider date={data.parent.createdAt} />
+                <div className="border-b border-border bg-card/70 p-3 md:p-4">
+                  <div className="flex gap-3">
                     <Image
-                      src={data.parent.authorAvatar}
-                      alt={data.parent.authorName}
+                      src={getAvatar(
+                        data.parent.authorAvatar,
+                        data.parent.authorEmail,
+                      )}
+                      alt=""
                       width={32}
                       height={32}
-                      className="size-8 rounded-full shrink-0"
+                      className="size-8 shrink-0 rounded-full border border-border/70 object-cover"
                     />
 
-                    <div className="flex-1 space-y-1 min-w-0">
-                      <div className="flex items-center space-x-2">
-                        <span className="font-medium text-sm">
+                    <div className="min-w-0 flex-1 space-y-1">
+                      <div className="flex flex-wrap items-baseline gap-x-2 gap-y-1">
+                        <span className="text-sm font-semibold leading-5">
                           {data.parent.authorName}
                         </span>
 
-                        <span className="text-xs text-muted-foreground">
-                          {new Intl.DateTimeFormat('en-US', {
-                            hour: 'numeric',
-                            minute: 'numeric',
-                            hour12: true,
-                            month: 'short',
-                            day: 'numeric',
-                          }).format(data.parent.createdAt)}
-                        </span>
+                        <time
+                          dateTime={new Date(
+                            data.parent.createdAt,
+                          ).toISOString()}
+                          className="whitespace-nowrap text-xs leading-4 tabular-nums text-muted-foreground"
+                        >
+                          {formatMessageTimestamp(data.parent.createdAt)}
+                        </time>
                       </div>
 
                       <SafeContent
-                        className="text-sm wrap-break-word prose dark:prose-invert max-w-none marker:text-primary"
+                        className="mt-1 text-sm leading-6 wrap-break-word prose dark:prose-invert max-w-none marker:text-primary"
                         content={JSON.parse(data.parent.content)}
                       />
                     </div>
@@ -188,19 +211,34 @@ export const ThreadSidebar = ({ user }: ThreadSidebarProps) => {
                 </div>
 
                 {/* Thread Replies */}
-                <div className="p-2">
-                  <p className="text-xs text-muted-foreground mb-3 px-2">
+                <div className="p-3 md:p-4">
+                  <p className="mb-3 px-1 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
                     {data.messages.length} replies
                   </p>
 
                   <div className="space-y-1">
-                    {data.messages.map((message) => (
-                      <ThreadReply
-                        key={message.id}
-                        messages={message}
-                        selectedThreadId={threadId}
-                      />
-                    ))}
+                    {data.messages.map((message, index) => {
+                      const previousDate =
+                        index === 0
+                          ? data.parent.createdAt
+                          : (data.messages[index - 1]?.createdAt ??
+                            data.parent.createdAt)
+                      const showDateDivider =
+                        getMessageDateKey(message.createdAt) !==
+                        getMessageDateKey(previousDate)
+
+                      return (
+                        <Fragment key={message.id}>
+                          {showDateDivider && (
+                            <MessageDateDivider date={message.createdAt} />
+                          )}
+                          <ThreadReply
+                            messages={message}
+                            selectedThreadId={threadId}
+                          />
+                        </Fragment>
+                      )
+                    })}
                   </div>
                 </div>
               </>
@@ -213,18 +251,19 @@ export const ThreadSidebar = ({ user }: ThreadSidebarProps) => {
             <Button
               type="button"
               size="sm"
-              className="absolute bottom-4 right-5 z-20 size-10 rounded-full hover:shadow-xl transition-all duration-200"
+              aria-label="Scroll to latest reply"
+              className="absolute bottom-4 right-5 z-20 size-10 rounded-full shadow-md transition-shadow hover:shadow-lg"
               onClick={() =>
                 bottomRef.current?.scrollIntoView({ block: 'end' })
               }
             >
-              <ArrowDown className="size-4" />
+              <ArrowDown aria-hidden="true" className="size-4" />
             </Button>
           )}
         </div>
 
         {/* Thread reply form */}
-        <div className="border-t p-2 md:p-4">
+        <div className="border-t border-border bg-background p-3 md:p-4">
           <ThreadReplyForm threadId={threadId} user={user} />
         </div>
       </div>
@@ -234,10 +273,10 @@ export const ThreadSidebar = ({ user }: ThreadSidebarProps) => {
   return (
     <>
       {/* Desktop Thread Sidebar */}
-      <div className="hidden md:block">{threadContent}</div>
+      <div className="hidden xl:block">{threadContent}</div>
 
-      {/* Mobile Thread Sidebar - Full Screen Overlay */}
-      <div className="md:hidden fixed inset-0 z-50 bg-background">
+      {/* Mobile, tablet, and compact desktop thread - Full Screen Overlay */}
+      <div className="fixed inset-0 z-50 bg-background xl:hidden">
         {threadContent}
       </div>
     </>

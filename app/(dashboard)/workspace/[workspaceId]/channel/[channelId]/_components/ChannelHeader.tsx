@@ -1,4 +1,5 @@
 import { ThemeToggle } from '@/components/ui/theme-toggle'
+import { Hash } from 'lucide-react'
 import InviteMember from './member/InviteMember'
 import { MemberOverView } from './member/MemberOverView'
 
@@ -8,16 +9,26 @@ interface ChannelHeaderProps {
 
 export const ChannelHeader = ({ channelName }: ChannelHeaderProps) => {
   return (
-    <div className="flex items-center justify-between h-14 px-2 md:px-4 border-b">
-      <h1 className="text-base md:text-lg font-semibold truncate">
-        #{channelName}
-      </h1>
+    <header className="flex h-14 min-w-0 items-center justify-between gap-3 border-b border-border bg-background/90 px-3 backdrop-blur-sm md:px-4">
+      <div className="flex min-w-0 flex-1 items-center gap-3">
+        <span className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
+          <Hash aria-hidden="true" className="size-4" />
+        </span>
+        <div className="min-w-0">
+          <p className="hidden text-[10px] font-semibold uppercase tracking-[0.14em] text-muted-foreground sm:block">
+            Channel
+          </p>
+          <h1 className="truncate text-sm font-semibold tracking-tight text-foreground md:text-base">
+            {channelName ? `#${channelName}` : 'Channel'}
+          </h1>
+        </div>
+      </div>
 
-      <div className="flex items-center space-x-2 md:space-x-3">
+      <div className="flex shrink-0 items-center gap-1.5 md:gap-2">
         <InviteMember />
         <MemberOverView />
         <ThemeToggle />
       </div>
-    </div>
+    </header>
   )
 }

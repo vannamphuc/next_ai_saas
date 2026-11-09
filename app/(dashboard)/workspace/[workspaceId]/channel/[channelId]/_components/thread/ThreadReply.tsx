@@ -1,7 +1,9 @@
 import { SafeContent } from '@/components/rich-text-edior/SafeContent'
 import { MessageListItem } from '@/lib/type'
+import { getAvatar } from '@/lib/get-avatar'
 import Image from 'next/image'
 import { ReactionsBar } from '../reaction/ReactionsBar'
+import { formatMessageTimestamp } from '../message/MessageItem'
 
 interface ThreadReplyProps {
   messages: MessageListItem
@@ -13,32 +15,30 @@ export const ThreadReply = ({
   selectedThreadId,
 }: ThreadReplyProps) => {
   return (
-    <div className="flex space-x-3 p-3 hover:bg-muted/30 rounded-lg">
+    <div className="group flex gap-3 rounded-xl p-3 transition-colors duration-150 hover:bg-accent/70">
       <Image
-        alt="Author Avatar"
-        src={messages.authorAvatar}
+        alt=""
+        src={getAvatar(messages.authorAvatar, messages.authorEmail)}
         width={32}
         height={32}
-        className="size-8 rounded-full shrink-0"
+        className="size-8 shrink-0 rounded-full border border-border/70 object-cover"
       />
 
-      <div className="flex-1 space-y-1 min-w-0">
-        <div className="flex items-center space-x-2">
-          <span className="font-medium text-sm">{messages.authorName}</span>
-
-          <span className="text-xs text-muted-foreground">
-            {new Intl.DateTimeFormat('en-US', {
-              hour: 'numeric',
-              minute: 'numeric',
-              hour12: true,
-              month: 'short',
-              day: 'numeric',
-            }).format(messages.createdAt)}
+      <div className="min-w-0 flex-1 space-y-1">
+        <div className="flex flex-wrap items-baseline gap-x-2 gap-y-1">
+          <span className="text-sm font-semibold leading-5">
+            {messages.authorName}
           </span>
+          <time
+            dateTime={new Date(messages.createdAt).toISOString()}
+            className="whitespace-nowrap text-xs leading-4 tabular-nums text-muted-foreground"
+          >
+            {formatMessageTimestamp(messages.createdAt)}
+          </time>
         </div>
 
         <SafeContent
-          className="text-sm wrap-break-word prose dark:prose-invert max-w-none marker:text-primary"
+          className="mt-1 text-sm leading-6 wrap-break-word prose dark:prose-invert max-w-none marker:text-primary"
           content={JSON.parse(messages.content)}
         />
 
@@ -46,7 +46,7 @@ export const ThreadReply = ({
           <div className="mt-4">
             <Image
               src={messages.imageUrl}
-              alt="Message Attachment"
+              alt="Message attachment"
               width={512}
               height={512}
               className="rounded-md max-h-[320px] w-auto object-contain"

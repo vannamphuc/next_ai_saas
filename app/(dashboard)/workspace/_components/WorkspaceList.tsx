@@ -67,7 +67,7 @@ export const WorkspaceList = ({ showName = false }: { showName?: boolean }) => {
     <TooltipProvider>
       <div className="flex flex-col gap-3 w-full">
         {workspaces.map((workspace) => {
-          const isActive = workspace.id === currentWorkspace.orgCode
+          const isActive = workspace.id === currentWorkspace?.orgCode
           return (
             <Tooltip key={workspace.id}>
               <TooltipTrigger asChild>

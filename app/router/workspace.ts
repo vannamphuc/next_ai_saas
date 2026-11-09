@@ -3,7 +3,6 @@ import { getKindeServerSession } from '@kinde-oss/kinde-auth-nextjs/server'
 import z from 'zod'
 import { base } from '../middlewares/base'
 import { requiredAuthMiddleware } from '../middlewares/auth'
-import { requiredWorkspaceMiddleware } from '../middlewares/workspace'
 import { workspaceSchema } from '../schemas/workspace'
 import { init, Organizations } from '@kinde/management-api-js'
 import { standardSecurityMiddlewae } from '../middlewares/arcject/standard'
@@ -11,7 +10,6 @@ import { heavyWriteSecurityMiddleware } from '../middlewares/arcject/heavy-write
 
 export const listWorkspace = base
   .use(requiredAuthMiddleware)
-  .use(requiredWorkspaceMiddleware)
   .route({
     method: 'GET',
     path: '/workspace',
@@ -26,15 +24,19 @@ export const listWorkspace = base
           id: z.string(),
           name: z.string(),
           avatar: z.string(),
+          unreadCount: z.number().int().nonnegative().optional(),
         }),
       ),
       user: z.custom<KindeUser<Record<string, unknown>>>(),
-      currentWorkspace: z.custom<KindeOrganization<unknown>>(),
+      currentWorkspace: z.custom<KindeOrganization<unknown>>().nullable(),
     }),
   )
   .handler(async ({ context, errors }) => {
-    const { getUserOrganizations } = getKindeServerSession()
-    const organizations = await getUserOrganizations()
+    const { getUserOrganizations, getOrganization } = getKindeServerSession()
+    const [organizations, currentWorkspace] = await Promise.all([
+      getUserOrganizations(),
+      getOrganization(),
+    ])
 
     if (!organizations) {
       throw errors.INTERNAL_SERVER_ERROR()
@@ -47,13 +49,12 @@ export const listWorkspace = base
         avatar: org.name?.charAt(0).toUpperCase() ?? 'M',
       })),
       user: context.user,
-      currentWorkspace: context.workspace,
+      currentWorkspace: currentWorkspace ?? null,
     }
   })
 
 export const createWorkspace = base
   .use(requiredAuthMiddleware)
-  .use(requiredWorkspaceMiddleware)
   .use(standardSecurityMiddlewae)
   .use(heavyWriteSecurityMiddleware)
   .route({
