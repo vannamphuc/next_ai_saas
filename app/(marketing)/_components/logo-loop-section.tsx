@@ -71,7 +71,7 @@ export default function LogoLoopSection() {
   return (
     <section className="bg-background py-10 md:py-14">
       <div className="mx-auto max-w-5xl px-6">
-        <p className="mb-7 text-center text-xs font-semibold tracking-[0.2em] text-muted-foreground">
+        <p className="mb-7 text-center text-xs font-semibold tracking-[0.16em] text-muted-foreground">
           BUILT WITH MODERN STACK
         </p>
         <LogoLoop

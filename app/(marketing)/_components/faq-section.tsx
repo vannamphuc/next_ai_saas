@@ -52,7 +52,7 @@ export default function FaqSection() {
                     className="size-4 shrink-0 text-muted-foreground transition-transform duration-200 group-open:rotate-180 motion-reduce:transition-none"
                   />
                 </summary>
-                <p className="max-w-2xl pr-8 pt-3 text-sm leading-6 text-muted-foreground">
+                <p className="max-w-xl pr-8 pt-3 text-sm leading-6 text-muted-foreground">
                   {answer}
                 </p>
               </details>

@@ -325,7 +325,7 @@ function VelocityText({
     ...(fontSize !== undefined
       ? {
           fontSize: typeof fontSize === 'number' ? `${fontSize}px` : fontSize,
-          lineHeight: 1,
+          lineHeight: 1.5,
         }
       : {}),
     ...(fontWeight !== undefined ? { fontWeight } : {}),

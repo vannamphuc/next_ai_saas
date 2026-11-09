@@ -40,11 +40,11 @@ export default function Home() {
       <ScrollVelocity
         texts={['Clear context · Fewer check-ins · Better teamwork']}
         velocity={24}
-        fontSize="0.75rem"
+        fontSize="0.875rem"
         fontWeight={600}
         gap={24}
         separator="•"
-        className="uppercase tracking-[0.16em] text-muted-foreground"
+        className="tracking-[0.08em] text-muted-foreground"
       />
       <HowItWorksSection />
       <StatsSection />
