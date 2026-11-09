@@ -18,6 +18,8 @@
     "@arcjet/inspect": "^1.0.0",
     "@arcjet/next": "^1.0.0",
     "@hookform/resolvers": "^5.2.2",
+    "@hugeicons/core-free-icons": "4.3.3",
+    "@hugeicons/react": "1.1.10",
     "@kinde-oss/kinde-auth-nextjs": "^2.11.0",
     "@kinde/management-api-js": "^0.14.0",
     "@openrouter/ai-sdk-provider": "^2.1.1",

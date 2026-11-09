@@ -14,10 +14,10 @@ import {
 import { useKindeBrowserClient } from '@kinde-oss/kinde-auth-nextjs'
 
 const menuItems = [
-  { name: 'Features', href: '#link' },
-  { name: 'Solution', href: '#link' },
-  { name: 'Pricing', href: '#link' },
-  { name: 'About', href: '#link' },
+  { name: 'Features', href: '#features' },
+  { name: 'How it works', href: '#how-it-works' },
+  { name: 'Pricing', href: '#pricing' },
+  { name: 'FAQ', href: '#faq' },
 ]
 
 export const HeroHeader = () => {
@@ -33,6 +33,35 @@ export const HeroHeader = () => {
     window.addEventListener('scroll', handleScroll)
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
+
+  const handleMenuItemClick = (
+    event: React.MouseEvent<HTMLAnchorElement>,
+    href: string,
+  ) => {
+    setMenuState(false)
+
+    if (!href.startsWith('#')) return
+
+    const target = document.getElementById(href.slice(1))
+    if (!target) return
+
+    event.preventDefault()
+    if (window.location.hash !== href) {
+      window.history.pushState(null, '', href)
+    }
+
+    window.requestAnimationFrame(() => {
+      const prefersReducedMotion = window.matchMedia(
+        '(prefers-reduced-motion: reduce)',
+      ).matches
+
+      target.scrollIntoView({
+        behavior: prefersReducedMotion ? 'auto' : 'smooth',
+        block: 'start',
+      })
+    })
+  }
+
   return (
     <header>
       <nav
@@ -55,13 +84,12 @@ export const HeroHeader = () => {
               >
                 <Image
                   src={Logo}
-                  alt="Van Nam Phuc Logo"
+                  alt="TailFlow logo"
                   width={32}
                   height={32}
+                  unoptimized
                 />
-                <h1 className="text-2xl font-bold">
-                  Van <span className="text-primary">Nam Phuc</span>
-                </h1>
+                <span className="text-2xl font-bold">TailFlow</span>
               </Link>
               <button
                 onClick={() => setMenuState(!menuState)}
@@ -79,6 +107,7 @@ export const HeroHeader = () => {
                   <li key={index}>
                     <Link
                       href={item.href}
+                      onClick={(event) => handleMenuItemClick(event, item.href)}
                       className="text-muted-foreground hover:text-accent-foreground block duration-150"
                     >
                       <span>{item.name}</span>
@@ -95,6 +124,7 @@ export const HeroHeader = () => {
                     <li key={index}>
                       <Link
                         href={item.href}
+                        onClick={(event) => handleMenuItemClick(event, item.href)}
                         className="text-muted-foreground hover:text-accent-foreground block duration-150"
                       >
                         <span>{item.name}</span>
@@ -109,6 +139,7 @@ export const HeroHeader = () => {
                     <>
                       <Link
                         href="/workspace"
+                        prefetch={false}
                         className={buttonVariants({
                           size: 'sm',
                         })}

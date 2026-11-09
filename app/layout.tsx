@@ -18,8 +18,10 @@ const geistMono = Geist_Mono({
 })
 
 export const metadata: Metadata = {
-  title: 'Van Nam Phuc',
-  description: 'AI-ready home for team communication',
+  metadataBase: new URL(process.env.KINDE_SITE_URL ?? 'http://localhost:3000'),
+  title: 'TailFlow — AI-ready team communication',
+  description:
+    'Channels, threads and AI summaries that keep product teams in sync.',
 }
 
 export default function RootLayout({
