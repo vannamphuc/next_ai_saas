@@ -2,6 +2,8 @@
 import Link from 'next/link'
 import { Menu, X } from 'lucide-react'
 import { buttonVariants } from '@/components/ui/button'
+import { Skeleton } from '@/components/ui/skeleton'
+import { ThemeToggle } from '@/components/ui/theme-toggle'
 import React from 'react'
 import { cn } from '@/lib/utils'
 import Logo from '@/public/logo.webp'
@@ -12,6 +14,7 @@ import {
   LogoutLink,
 } from '@kinde-oss/kinde-auth-nextjs/components'
 import { useKindeBrowserClient } from '@kinde-oss/kinde-auth-nextjs'
+import useHydrated from '@/components/reactbits/useHydrated'
 
 const menuItems = [
   { name: 'Features', href: '#features' },
@@ -24,7 +27,8 @@ export const HeroHeader = () => {
   const [menuState, setMenuState] = React.useState(false)
   const [isScrolled, setIsScrolled] = React.useState(false)
   const { getUser, isLoading } = useKindeBrowserClient()
-  const user = getUser()
+  const authReady = useHydrated() && isLoading === false
+  const user = authReady ? getUser() : null
 
   React.useEffect(() => {
     const handleScroll = () => {
@@ -91,14 +95,17 @@ export const HeroHeader = () => {
                 />
                 <span className="text-2xl font-bold">TailFlow</span>
               </Link>
-              <button
-                onClick={() => setMenuState(!menuState)}
-                aria-label={menuState == true ? 'Close Menu' : 'Open Menu'}
-                className="relative z-20 -m-2.5 -mr-4 block cursor-pointer p-2.5 lg:hidden"
-              >
-                <Menu className="in-data-[state=active]:rotate-180 in-data-[state=active]:scale-0 in-data-[state=active]:opacity-0 m-auto size-6 duration-200" />
-                <X className="in-data-[state=active]:rotate-0 in-data-[state=active]:scale-100 in-data-[state=active]:opacity-100 absolute inset-0 m-auto size-6 -rotate-180 scale-0 opacity-0 duration-200" />
-              </button>
+              <div className="flex items-center gap-2">
+                <ThemeToggle />
+                <button
+                  onClick={() => setMenuState(!menuState)}
+                  aria-label={menuState == true ? 'Close Menu' : 'Open Menu'}
+                  className="relative z-20 -m-2.5 -mr-4 block cursor-pointer p-2.5 lg:hidden"
+                >
+                  <Menu className="in-data-[state=active]:rotate-180 in-data-[state=active]:scale-0 in-data-[state=active]:opacity-0 m-auto size-6 duration-200" />
+                  <X className="in-data-[state=active]:rotate-0 in-data-[state=active]:scale-100 in-data-[state=active]:opacity-100 absolute inset-0 m-auto size-6 -rotate-180 scale-0 opacity-0 duration-200" />
+                </button>
+              </div>
             </div>
 
             <div className="absolute inset-0 m-auto hidden size-fit lg:block">
@@ -124,7 +131,9 @@ export const HeroHeader = () => {
                     <li key={index}>
                       <Link
                         href={item.href}
-                        onClick={(event) => handleMenuItemClick(event, item.href)}
+                        onClick={(event) =>
+                          handleMenuItemClick(event, item.href)
+                        }
                         className="text-muted-foreground hover:text-accent-foreground block duration-150"
                       >
                         <span>{item.name}</span>
@@ -133,74 +142,83 @@ export const HeroHeader = () => {
                   ))}
                 </ul>
               </div>
-              {isLoading ? null : (
-                <div className="flex w-full flex-col space-y-3 sm:flex-row sm:gap-3 sm:space-y-0 md:w-fit">
-                  {user ? (
-                    <>
-                      <Link
-                        href="/workspace"
-                        prefetch={false}
-                        className={buttonVariants({
-                          size: 'sm',
-                        })}
-                      >
-                        Dashboard
-                      </Link>
+              <div className="flex w-full items-center justify-end gap-2 md:w-fit">
+                {!authReady ? (
+                  <div
+                    role="status"
+                    aria-label="Loading account status"
+                    className="flex gap-2"
+                  >
+                    <Skeleton className="h-9 w-20 motion-reduce:animate-none" />
+                    <Skeleton className="h-9 w-20 motion-reduce:animate-none" />
+                  </div>
+                ) : (
+                  <div className="flex w-full flex-col space-y-3 sm:flex-row sm:gap-3 sm:space-y-0 md:w-fit">
+                    {user ? (
+                      <>
+                        <Link
+                          href="/workspace"
+                          prefetch={false}
+                          className={buttonVariants({ size: 'sm' })}
+                        >
+                          Dashboard
+                        </Link>
 
-                      <LogoutLink
-                        className={buttonVariants({
-                          variant: 'outline',
-                          size: 'sm',
-                        })}
-                      >
-                        Logout
-                      </LogoutLink>
-                    </>
-                  ) : (
-                    <>
-                      <LoginLink
-                        className={buttonVariants({
-                          variant: 'outline',
-                          size: 'sm',
-                          className: cn(isScrolled && 'lg:hidden!'),
-                        })}
-                      >
-                        Login
-                      </LoginLink>
+                        <LogoutLink
+                          className={buttonVariants({
+                            variant: 'outline',
+                            size: 'sm',
+                          })}
+                        >
+                          Logout
+                        </LogoutLink>
+                      </>
+                    ) : (
+                      <>
+                        <LoginLink
+                          className={buttonVariants({
+                            variant: 'outline',
+                            size: 'sm',
+                            className: cn(isScrolled && 'lg:hidden!'),
+                          })}
+                        >
+                          Login
+                        </LoginLink>
 
-                      <RegisterLink
-                        className={buttonVariants({
-                          size: 'sm',
-                          className: cn(isScrolled && 'lg:hidden!'),
-                        })}
-                        authUrlParams={{
-                          is_create_org: 'true',
-                          org_name: 'My Workspace',
-                          pricing_table_key: 'organization_plans',
-                        }}
-                      >
-                        Sign Up
-                      </RegisterLink>
+                        <RegisterLink
+                          className={buttonVariants({
+                            size: 'sm',
+                            className: cn(isScrolled && 'lg:hidden!'),
+                          })}
+                          authUrlParams={{
+                            is_create_org: 'true',
+                            org_name: 'My Workspace',
+                            pricing_table_key: 'organization_plans',
+                          }}
+                        >
+                          Sign Up
+                        </RegisterLink>
 
-                      <RegisterLink
-                        className={buttonVariants({
-                          size: 'sm',
-                          className: cn(
-                            isScrolled ? 'lg:inline-flex!' : 'hidden!',
-                          ),
-                        })}
-                        authUrlParams={{
-                          is_create_org: 'true',
-                          org_name: 'My Workspace',
-                          pricing_table_key: 'organization_plans',
-                        }}
-                      >
-                        Get Started
-                      </RegisterLink>
-                    </>
-                  )}
-                </div>
-              )}
+                        <RegisterLink
+                          className={buttonVariants({
+                            size: 'sm',
+                            className: cn(
+                              isScrolled ? 'lg:inline-flex!' : 'hidden!',
+                            ),
+                          })}
+                          authUrlParams={{
+                            is_create_org: 'true',
+                            org_name: 'My Workspace',
+                            pricing_table_key: 'organization_plans',
+                          }}
+                        >
+                          Get Started
+                        </RegisterLink>
+                      </>
+                    )}
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         </div>

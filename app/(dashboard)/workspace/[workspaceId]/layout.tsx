@@ -70,7 +70,7 @@ const ChannelListLayout = async ({
   return (
     <div className="flex h-full flex-1 overflow-hidden">
       {/* Desktop Channel Sidebar */}
-      <div className="hidden md:flex h-full w-70 flex-col bg-secondary/50 border-r border-border shrink-0">
+      <div className="hidden md:flex h-full w-70 shrink-0 flex-col border-r border-sidebar-border bg-sidebar text-sidebar-foreground">
         {channelSidebarContent}
       </div>
 

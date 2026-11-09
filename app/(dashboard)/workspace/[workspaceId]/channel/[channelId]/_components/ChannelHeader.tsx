@@ -1,4 +1,3 @@
-import { ThemeToggle } from '@/components/ui/theme-toggle'
 import { Hash } from 'lucide-react'
 import InviteMember from './member/InviteMember'
 import { MemberOverView } from './member/MemberOverView'
@@ -27,7 +26,6 @@ export const ChannelHeader = ({ channelName }: ChannelHeaderProps) => {
       <div className="flex shrink-0 items-center gap-1.5 md:gap-2">
         <InviteMember />
         <MemberOverView />
-        <ThemeToggle />
       </div>
     </header>
   )

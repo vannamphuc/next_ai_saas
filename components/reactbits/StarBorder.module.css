@@ -1,0 +1,7 @@
+.starBorder {
+  --star-border-color: var(--star-border-color-light, #c76a1a);
+}
+
+:global(.dark) .starBorder {
+  --star-border-color: #e8b44a;
+}

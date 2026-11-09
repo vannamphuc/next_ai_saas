@@ -1,7 +1,6 @@
 'use client'
 
 import { motion, useReducedMotion } from 'motion/react'
-import { useTheme } from 'next-themes'
 import {
   type ComponentPropsWithoutRef,
   type CSSProperties,
@@ -9,6 +8,7 @@ import {
   type ReactNode,
 } from 'react'
 import { cn } from '@/lib/utils'
+import styles from './StarBorder.module.css'
 
 type StarBorderOwnProps<C extends ElementType> = {
   as?: C
@@ -31,21 +31,20 @@ export default function StarBorder<C extends ElementType = 'button'>({
   ...elementProps
 }: StarBorderProps<C>) {
   const Component = as ?? 'button'
-  const { resolvedTheme } = useTheme()
   const shouldReduceMotion = useReducedMotion()
-  const activeColor = resolvedTheme === 'dark' ? '#E8B44A' : color
 
   return (
     <Component
       {...(Component === 'button' ? { type: 'button' } : {})}
       {...elementProps}
       className={cn(
+        styles.starBorder,
         'group/star-border relative isolate inline-flex cursor-pointer overflow-hidden rounded-xl p-px text-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background',
       )}
       style={
         {
           ...style,
-          '--star-border-color': activeColor,
+          '--star-border-color-light': color,
         } as CSSProperties
       }
     >

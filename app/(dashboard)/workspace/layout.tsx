@@ -5,6 +5,8 @@ import { UserNav } from './_components/UserNav'
 import { orpc } from '@/lib/orpc'
 import { getQueryClient, HydrateClient } from '@/lib/query/hydration'
 import { MobileSidebar } from '@/components/MobileSidebar'
+import { ThemeToggle } from '@/components/ui/theme-toggle'
+import { WorkspaceNameLabel } from './_components/WorkspaceNameLabel'
 
 const WorkspaceLayout = async ({ children }: { children: React.ReactNode }) => {
   const queryClient = getQueryClient()
@@ -20,10 +22,13 @@ const WorkspaceLayout = async ({ children }: { children: React.ReactNode }) => {
         <CreateWorkspace />
       </div>
 
-      <div className="mt-auto w-full">
-        <HydrateClient client={queryClient}>
-          <UserNav />
-        </HydrateClient>
+      <div className="mt-auto flex w-full flex-col items-center gap-2">
+        {!showName && <ThemeToggle />}
+        <div className="w-full">
+          <HydrateClient client={queryClient}>
+            <UserNav />
+          </HydrateClient>
+        </div>
       </div>
     </>
   )
@@ -31,7 +36,7 @@ const WorkspaceLayout = async ({ children }: { children: React.ReactNode }) => {
   return (
     <div className="flex w-full h-screen overflow-hidden">
       {/* Desktop Sidebar */}
-      <div className="hidden md:flex h-full w-16 flex-col items-center bg-secondary py-3 px-2 border-r border-border shrink-0">
+      <div className="hidden md:flex h-full w-16 shrink-0 flex-col items-center border-r border-sidebar-border bg-sidebar px-2 py-3 text-sidebar-foreground">
         {sidebarContent(false)}
       </div>
 
@@ -47,7 +52,12 @@ const WorkspaceLayout = async ({ children }: { children: React.ReactNode }) => {
               {sidebarContent(true)}
             </div>
           </MobileSidebar>
-          <span className="text-sm font-bold tracking-tight">Van Nam Phuc</span>
+          <HydrateClient client={queryClient}>
+            <WorkspaceNameLabel />
+          </HydrateClient>
+          <div className="ml-auto">
+            <ThemeToggle />
+          </div>
         </div>
 
         <div className="flex-1 overflow-hidden">{children}</div>

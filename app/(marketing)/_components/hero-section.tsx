@@ -9,6 +9,7 @@ import { AnimatedGroup } from '@/components/ui/animated-group'
 import BlurText from '@/components/reactbits/BlurText'
 import StarBorder from '@/components/reactbits/StarBorder'
 import Aurora from '@/components/reactbits/Aurora'
+import useHydrated from '@/components/reactbits/useHydrated'
 import { useTheme } from 'next-themes'
 import { HeroHeader } from './header'
 import HeroLight from '@/public/screenshot-light.webp'
@@ -36,7 +37,7 @@ const transitionVariants = {
 
 export default function HeroSection() {
   const { resolvedTheme } = useTheme()
-  const isDark = resolvedTheme === 'dark'
+  const isDark = useHydrated() && resolvedTheme === 'dark'
   return (
     <>
       <HeroHeader />

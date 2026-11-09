@@ -63,7 +63,7 @@ export const UserNav = () => {
           <div className="grid flex-1 text-left text-sm leading-tight">
             <p className="truncate font-medium">{user.given_name}</p>
             <p className="text-muted-foreground truncate text-xs">
-              phucnamvan@gmail.com
+              {user.email}
             </p>
           </div>
         </DropdownMenuLabel>

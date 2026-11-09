@@ -12,6 +12,7 @@ import { useTheme } from 'next-themes'
 import MagicBento, {
   type MagicBentoItem,
 } from '@/components/reactbits/MagicBento'
+import useHydrated from '@/components/reactbits/useHydrated'
 
 const features: MagicBentoItem[] = [
   {
@@ -64,6 +65,7 @@ const features: MagicBentoItem[] = [
 
 export default function FeaturesSection() {
   const { resolvedTheme } = useTheme()
+  const themeReady = useHydrated()
 
   return (
     <section
@@ -87,7 +89,7 @@ export default function FeaturesSection() {
         items={features}
         columns={4}
         rowHeight={200}
-        theme={resolvedTheme === 'dark' ? 'dark' : 'light'}
+        theme={themeReady && resolvedTheme === 'dark' ? 'dark' : 'light'}
         glowColor="199, 106, 26"
         enableSpotlight={true}
         enableBorderGlow={true}
