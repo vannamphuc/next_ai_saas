@@ -9,7 +9,7 @@ import { createOpenRouter } from '@openrouter/ai-sdk-provider'
 import { streamToEventIterator } from '@orpc/server'
 import { aiSecurityMiddleware } from '../middlewares/ai'
 
-const MODEL_ID = 'arcee-ai/trinity-large-preview:free'
+const MODEL_ID = 'thinkingmachines/inkling-2-small:free'
 
 const openRouter = createOpenRouter({
   apiKey: process.env.OPENROUTER_API_KEY,
