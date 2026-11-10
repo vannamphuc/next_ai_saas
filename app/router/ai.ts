@@ -9,7 +9,7 @@ import { createOpenRouter } from '@openrouter/ai-sdk-provider'
 import { streamToEventIterator } from '@orpc/server'
 import { aiSecurityMiddleware } from '../middlewares/ai'
 
-const MODEL_ID = 'nvidia/nemotron-3.5-embed-1b:free'
+const MODEL_ID = 'nvidia/nemotron-3.5-lightning:free'
 
 const openRouter = createOpenRouter({
   apiKey: process.env.OPENROUTER_API_KEY,
